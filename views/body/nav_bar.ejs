@@ -1,0 +1,18 @@
+<!-- nav bar block -->
+<div class="nav-block">
+  <div class="nav-main-block">
+    <a href="http://localhost:3000/board">
+      <img src="/img/logo.jpg">
+    </a>
+  </div>
+  <div class="background"></div>
+  <div class="nav-bar">
+    <% for(var i=0;i < nav.length;i++) { %>
+    <span class="nav-bar-item">
+      <h3>
+        <a href="http://localhost:3000/board"><%= nav[i] %></a>
+      </h3>
+    </span>
+    <% } %>
+  </div>
+</div>

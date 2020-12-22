@@ -1,0 +1,11 @@
+<!-- board down block -->
+<div class="board-down-block">
+  <div class="board-down-newpost">
+    <button class="board-down-newpostbtn" onclick="location.href='/board/write'">New Post</button>
+  </div>
+  <div class="board-down-pagelist">
+    <% for(var i = 1;i<=3;i++){%>
+      <a href="/board?page=<%= i %>"><%= i %></a>
+    <% } %>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<!-- post list block -->
+<div class="post-list-block">
+  <ul class="post-list-table" id="post-list-table">
+    <li class="post-list-li bold-text">
+      <span class="post-list-linumber">글번호</span>
+      <span class="post-list-lisubject">글제목</span>
+      <span class="post-list-liauthor">글쓴이</span>
+      <span class="post-list-lidate">작성일</span>
+      <span class="post-list-liseecount">조회수</span>
+      <span class="post-list-ligoodcount">추천수</span>
+    </li>
+    <% for(var i=0;i<post_list.length;i++) {%>
+    <li class="post-list-li">
+      <span class="post-list-linumber"><%=post_list[i].index%></span>
+      <span class="post-list-lisubject"><a href="/board/<%=post_list[i].index%>"><%=post_list[i].subject%></a></span>
+      <span class="post-list-liauthor"><%=post_list[i].author%></span>
+      <span class="post-list-lidate"><%=post_list[i].date%></span>
+      <span class="post-list-liseecount"><%=post_list[i].viewcnt%></span>
+      <span class="post-list-ligoodcount"><%=post_list[i].goodcnt%></span>
+    </li>
+    <% } %>
+  </ul>
+</div>

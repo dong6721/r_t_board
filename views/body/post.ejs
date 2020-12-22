@@ -1,0 +1,19 @@
+<!-- post block-->
+<div class="post-block">
+  <div class="post-title-block">
+    <div class="post-title-titlename">
+      <p id="post-titlename"><%=read_post.subject%></p>
+    </div>
+    <div class="post-title-subdatablock">
+      <div class="post-title-authordate">
+        <p id="post-author"><%=read_post.author %> | <%=read_post.date%></p>
+      </div>
+      <div class="post-title-subdata">
+        <p id="post-subdata">조회수 <%=read_post.viewcnt%></p>
+      </div>
+    </div>
+  </div>
+  <div class="post-contents-block">
+    <p id="post-contents"><%=read_post.contents%></p>
+  </div>
+</div>

@@ -1,0 +1,123 @@
+const mongoose = require('./mongoose');
+const Schema = mongoose.Schema;
+const autoincrement = require('mongoose-auto-increment');
+var connection = mongoose.createConnection("mongodb://localhost:27017/TFBoard",{
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+   useFindAndModify: false
+});
+autoincrement.initialize(connection);
+//schema 정리
+/*
+required: boolean or function, if true adds a required validator for this property
+default: Any or function, sets a default value for the path. If the value is a function, the return value of the function is used as the default.
+select: boolean, specifies default projections for queries
+validate: function, adds a validator function for this property
+get: function, defines a custom getter for this property using Object.defineProperty().
+set: function, defines a custom setter for this property using Object.defineProperty().
+alias: string, mongoose >= 4.10.0 only. Defines a virtual with the given name that gets/sets this path.
+immutable: boolean, defines path as immutable. Mongoose prevents you from changing immutable paths unless the parent document has isNew: true.
+transform: function, Mongoose calls this function when you call Document#toJSON() function, including when you JSON.stringify() a document.
+
+indexes
+index: boolean, whether to define an index on this property.
+unique: boolean, whether to define a unique index on this property.
+sparse: boolean, whether to define a sparse index on this property.
+
+String
+lowercase: boolean, whether to always call .toLowerCase() on the value
+uppercase: boolean, whether to always call .toUpperCase() on the value
+trim: boolean, whether to always call .trim() on the value
+match: RegExp, creates a validator that checks if the value matches the given regular expression
+enum: Array, creates a validator that checks if the value is in the given array.
+minLength: Number, creates a validator that checks if the value length is not less than the given number
+maxLength: Number, creates a validator that checks if the value length is not greater than the given number
+populate: Object, sets default populate options
+
+Number
+min: Number, creates a validator that checks if the value is greater than or equal to the given minimum.
+max: Number, creates a validator that checks if the value is less than or equal to the given maximum.
+enum: Array, creates a validator that checks if the value is strictly equal to one of the values in the given array.
+populate: Object, sets default populate options
+
+Date
+min: Date
+max: Date
+
+ObjectID
+populate: Object, sets default populate options
+
+more data is : https://mongoosejs.com/docs/schematypes.html#schematype-options
+*/
+//COMMENT(댓글) schema
+const cmtSchema = new Schema({
+  nickname: { //nickname data schema 추후 id number로 바꿀 예정
+    type : String,
+    required: true
+  },
+  comment: { //comment 내용
+    type : String,
+    required: true
+  },
+  date: {   //작성 날짜
+    type : Date,
+    required: true
+  }
+});
+//POST(게시물) schema
+const postSchema = new Schema({
+  index: {
+    type: Number,
+    unique:true
+  },
+  title: {
+    type : String
+  },
+  contents: {
+    type : String
+  },
+  author: {
+    type : String
+  },
+  date: {
+    type:Date
+  },
+  viewcnt: {
+    type:Number,
+    default: 0
+  },
+  goodcnt: {
+    type:Number,
+    default: 0
+  },
+  comment : [ cmtSchema ]
+});
+
+//identitycounters schema
+const counterSchema = new Schema({
+  count: {
+    type : Number
+  },
+  model: {
+    type : String
+  },
+  field: {
+    type: String
+  }
+})
+
+postSchema.plugin(autoincrement.plugin,{
+  model : 'board',
+  field : 'index',
+  startAt : 1,
+  increment : 1
+});
+
+module.exports = (req,schema_name)=>{
+  if(schema_name === "postSchema"){
+    return mongoose.model(req,postSchema,req);
+  }
+  else if(schema_name === "cntSchema"){
+    return mongoose.model(req,counterSchema,req);
+  }
+};

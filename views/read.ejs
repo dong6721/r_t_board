@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+    <%- include ('./head/head') %>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+    //websocket test
+    const socket = io.connect('http://localhost:3000', {
+      path: '/socket.io' ,
+    });
+    var post_index = $(location).attr('pathname').split("/");
+    socket.on('board_' + post_index[2], (data)=> {
+      console.log(data);
+      //socket.emit('reply','reply message');
+    });
+
+    </script>
+</head>
+<body>
+  <%- include ('./body/nav_bar') %>
+  <%- include ('./body/board_title') %>
+  <%- include ('./body/post') %>
+  <%- include ('./body/comment') %>
+</body>
+</html>

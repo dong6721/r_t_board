@@ -1,0 +1,53 @@
+<!-- comment block -->
+<div class="cmt-start-block">
+  <span class="cmt-start-text">
+    <p>COMMENT</p>
+  </span>
+  <span class="cmt-count-text">
+    <p id="cmt-count-text"><%=read_post.comment.length%> 개</p>
+  </span>
+</div>
+<button id="new_comment">new</button>
+
+<!-- comment section -->
+<ul class="cmt_list" id="cmt_list">
+  <% for(var i=0;i<read_post.comment.length;i++) { %>
+  <li>
+    <div id="cmt_id_<%=i%>" class="comment-block">
+      <div class="comment-nicknameBlock">
+        <div class="comment-nicknameBox">
+          <p><%=read_post.comment[i].nickname%></p>
+        </div>
+      </div>
+      <div class="comment-inputtextBlock">
+        <div class="comment-inputtextBox">
+          <hgroup class="speech-bubble" role="textbox" maxlength="999" spellcheck="false">
+            <p><%=read_post.comment[i].comment%></p>
+          </hgroup>
+        </div>
+      </div>
+      <div class="comment-dateBlock">
+        <div class="comment-dateBox">
+          <p><%=read_post.comment[i].date.toFormat('YYYY-MM-DD HH24:MI:SS')%></p>
+        </div>
+      </div>
+    </div>
+  </li>
+  <% } %>
+</ul>
+
+<div class="cmt-input-block">
+  <div class="comment-nicknameBlock">
+    <div class="comment-nicknameBox">
+      <p id="cmt-input-id">nickname</p>
+    </div>
+  </div>
+  <div class="cmt-input-textBlock">
+    <div class="cmt-input-textBox">
+      <textarea id="cmt-input-text" name="post-text" class="cmt-input-textarea" rows="10"></textarea>
+    </div>
+    <div class="cmt-input-postButtonBox">
+      <button id="cmt-input-postButton" class="cmt-input-postButton">COMMENT</button>
+    </div>
+  </div>
+</div>
