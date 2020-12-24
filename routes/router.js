@@ -4,7 +4,9 @@ const router = express.Router();
 const db = require('../mongoose/schema');
 var board = db("board", "postSchema");
 const clonedeep = require('lodash/clonedeep');
-
+/*const Editor = require('@toast-ui/editor');
+require('codemirror/lib/codemirror.css');
+require('@toast-ui/editor/dist/toastui-editor.css');*/
 
 //body-bodyParser
 router.use(bodyParser.json());
@@ -100,6 +102,7 @@ router.get('/board/:index', async (req, res, next) => {
           error: err
         });
       }
+      //get current time
       var postTime = doc.date.toFormat('YYYY-MM-DD');
       if (doc.date.toFormat('YYYY-MM-DD') === new Date().toFormat('YYYY-MM-DD')) {
         postTime = doc.date.toFormat('HH24:MI:SS');

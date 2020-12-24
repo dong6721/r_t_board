@@ -3,16 +3,19 @@ const path = require('path');
 const port = 3000;
 const router = require('./routes/router.js');
 const app = express();
+//set socket
+const webSocket = require('./socket/socket');
+
 require('date-utils');    //time
 //set ejs
 app.set('view engine','ejs');
 app.set('views',path.join(__dirname,'views'));
 app.engine('html', require('ejs').renderFile);
 
+app.set("io", webSocket);
+
 //set router
 app.use('/',router);
-//set socket
-const webSocket = require('./socket/socket');
 
 //set static data
 app.use(express.static('public'));

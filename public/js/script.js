@@ -1,36 +1,5 @@
 $(document).ready(function(){
   //ready action ( DOM Tree 생성 완료 후)
-
-  $("#cmt-input-postButton").click(()=> {
-    //send comment
-    var cmt_text = $("#cmt-input-text").val();
-    if($.trim(cmt_text) == ""){
-      //text 내용 없을경우
-      alert("내용을 입력해주세요.");
-      return;
-    }
-   $.ajax({
-     //댓글 달기 ajax (POST to /comment)
-     url:$(location).attr('href')+"/comment",
-     type:"POST",
-     dataType: "json",
-     contentType:"application/json",
-     data:
-     JSON.stringify({
-       "id": $("#cmt-input-id").text(),
-       "text": cmt_text
-     }),
-     success:(res)=>{
-       console.log(res);
-       //new_cmt(res.id,res.text,res.time);
-       $("#cmt-input-text").val("");
-     },
-     error:(req,status,err) => {
-       console.log("comment error!",req.responseJSON.error);
-     }
-   });
-  });
-
   $("#board-write-confirm").click(()=> {
     //send post
     var title = $("#board-write-title").val();
@@ -106,7 +75,6 @@ function new_cmt(id,nickname,text,date) {
     </div>
   </div>`;
   $("#cmt_list").append($input);
-  console.log("test");
 }
 
 

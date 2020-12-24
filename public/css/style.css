@@ -324,6 +324,7 @@ button:hover {
 }
 .board-write-titleblock {
   overflow:hidden;
+  padding:1px 0px;
 }
 .board-write-titleblock p {
   float:left;
@@ -336,10 +337,14 @@ button:hover {
   font-size:16px;
   width:480px;
   padding:8px 0px;
+  color:white;
+
+  background:#2e3338;
 }
 .board-write-contentsblock {
   overflow:hidden;
   margin-top:32px;
+  padding-top:1px;
 }
 .board-write-contentsblock p{
   float:left;
@@ -351,8 +356,10 @@ button:hover {
 .board-write-contents {
   resize:none;
   font-size:16px;
+  color:white;
   width:1170px;
   height:480px;
+  background:#2e3338;
 }
 .board-write-buttonblock {
   margin-top:16px;

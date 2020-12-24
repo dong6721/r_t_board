@@ -1,25 +1,80 @@
 <!doctype html>
 <html>
 <head>
-    <%- include ('./head/head') %>
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-    //websocket test
+  <%- include ('./head/head') %>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    //comment websocket
     const socket = io.connect('http://localhost:3000', {
-      path: '/socket.io' ,
+      path: '/socket.io',
     });
     var post_index = $(location).attr('pathname').split("/");
-    socket.on('board_' + post_index[2], (data)=> {
-      console.log(data);
+    socket.on('cmt/board/' + post_index[2], (data) => {
+      //console.log(data);
+      //set new comment
+      new_cmt(data.cmt_id,data.nickname,data.comment,data.date);
+      //comment animation
+      var autoheight = $("#cmt_id_" + data.cmt_id).children(".comment-inputtextBlock").height();
+      $("#cmt_id_" + data.cmt_id).children(".comment-inputtextBlock").css({height:1});
+      $("#cmt_id_" + data.cmt_id).children(".comment-inputtextBlock").animate({
+        height: autoheight
+      },500);
+
       //socket.emit('reply','reply message');
     });
+    //socket.io error
+    socket.on("error",(data) =>{
+      //comment write error!
+      if(data === "cmt err!"){
+        alert("comment error!");
+        location.reload();
+      }
+    });
+$(document).ready(()=>{
+  //send comment
+  $("#cmt-input-postButton").click(() => {
+    var cmt_text = $("#cmt-input-text").val();
+    if ($.trim(cmt_text) == "") {
+      //text 내용 없을경우
+      alert("내용을 입력해주세요.");
+      return;
+    }
+    var post_data = {
+      "id": $("#cmt-input-id").text(),
+      "text": cmt_text
+    };
+    socket.emit('cmt/board/' + post_index[2],post_data);
+    /*$.ajax({
+      //댓글 달기 ajax (POST to /comment)
+      url: $(location).attr('href') + "/comment",
+      type: "POST",
+      dataType: "json",
+      contentType: "application/json",
+      data: JSON.stringify({
+        "id": $("#cmt-input-id").text(),
+        "text": cmt_text
+      }),
+      success: (res) => {
+        console.log(res);
+        //new_cmt(res.id,res.text,res.time);
+        $("#cmt-input-text").val("");
+      },
+      error: (req, status, err) => {
+        console.log("comment error!", req.responseJSON.error);
+      }
+    });*/
+  });
+});
 
-    </script>
+
+  </script>
 </head>
+
 <body>
   <%- include ('./body/nav_bar') %>
   <%- include ('./body/board_title') %>
   <%- include ('./body/post') %>
   <%- include ('./body/comment') %>
 </body>
+
 </html>
