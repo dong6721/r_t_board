@@ -132,7 +132,8 @@
 
       //before webpage closing
       $(window).on("beforeunload", () => {
-
+        //comment typing update
+        socket.emit('cmt/board/' + post_index[2] + "/typing", {typing:false,id:$("#cmt-input-id").text()});
       });
     });
   </script>
