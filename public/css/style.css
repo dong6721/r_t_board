@@ -1,3 +1,5 @@
+/* site size : width = 1300px, height = auto */
+
 body {
   background:#24292E;
   max-width:1300px;
@@ -67,6 +69,13 @@ button:hover {
 .nav-bar-item:hover {
   background:white;
 }
+
+
+
+/*home board body block */
+
+
+
 
 /* board title block */
 .board-title-block {

@@ -16,7 +16,9 @@ router.use(bodyParser.urlencoded({
 
 //'/'
 router.get('/', (req,res,next) => {
-  res.redirect('board');
+  res.render('home', {
+    nav: ["nav1", "nav2", "nav3", "nav4"]
+  });
 });
 
 // '/board'
