@@ -6,8 +6,16 @@
 <body>
   <%- include ('./body/nav_bar') %>
 
-<!-- home board body block -->
-
+<!-- home-body block -->
+<div class="home-body-block">
+  <div class="home-body-box">
+    <a href="/board" class="home-body-boardname">board1</a>
+    <!-- 7개 -->
+    <% for(var i=0;i<7;i++) {%>
+    <a href="/board/1" class="home-body-postname">post1</a>
+    <% } %>
+  </div>
+</div>
 
 </body>
 </html>
