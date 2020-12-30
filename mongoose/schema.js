@@ -114,6 +114,19 @@ postSchema.plugin(autoincrement.plugin,{
 });
 
 module.exports = (req,schema_name)=>{
+  //check collection name 'req'\
+  var t = mongoose.connection.db.listCollections({name:req});
+console.log(t);
+  /*.next((err,collinfo)=>{
+    if(collinfo){
+      //if 'req' collection is exist
+      console.log(req);
+
+    }
+    else{
+      return err;
+    }
+  });*/
   if(schema_name === "postSchema"){
     return mongoose.model(req,postSchema,req);
   }

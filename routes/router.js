@@ -2,11 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const router = express.Router();
 const db = require('../mongoose/schema');
-var board = db("board", "postSchema");
 const clonedeep = require('lodash/clonedeep');
-/*const Editor = require('@toast-ui/editor');
-require('codemirror/lib/codemirror.css');
-require('@toast-ui/editor/dist/toastui-editor.css');*/
 
 //body-bodyParser
 router.use(bodyParser.json());
@@ -21,9 +17,10 @@ router.get('/', (req,res,next) => {
   });
 });
 
-// '/board'
-router.get('/board', async (req, res, next) => {
+// '/board/:boardindex'
+router.get('/board/:boardname', async (req, res, next) => {
   try {
+    var board = db(req.params.boardname,"postSchema");
     var post_list;
     /*var col = db("identitycounters", "cntSchema");
     col.findOne({ model: "board"},{_id:false,model:true,count:true},(err,docs)=>{
@@ -78,24 +75,26 @@ router.get('/board', async (req, res, next) => {
     //console.timeEnd();
     res.render('board', {
       nav: ["nav1", "nav2", "nav3", "nav4"],
-      board_title: "board test",
+      board_title: req.params.boardname,
       post_list: post_list
     });
   }
 });
 
 // '/board/write'
-router.get('/board/write', (req, res, next) => {
+router.get('/board/:boardname/write', (req, res, next) => {
   res.render('write', {
     nav: ["nav1", "nav2", "nav3", "nav4"],
-    board_title: "board title"
+    board_title: req.params.boardname
   });
 });
 
 // '/board/read'
 //read post page
-router.get('/board/:index', async (req, res, next) => {
+router.get('/board/:boardname/:index', async (req, res, next) => {
   try{
+    var board = db(req.params.boardname,"postSchema");
+    //console.log(board.collection);
     var read_post;
     await board.findOne({index:req.params.index},(err,doc)=>{
       if (err) {
@@ -129,15 +128,16 @@ router.get('/board/:index', async (req, res, next) => {
   finally {
     res.render('read', {
       nav: ["nav1","nav2","nav3","nav4"],
-      board_title: "board test",
+      board_title: req.params.boardname,
       read_post: read_post
     })
   }
 });
 
 //write new comment
-router.post('/board/:index/comment', (req, res, next) => {
+/*router.post('/:boardname/:index/comment', (req, res, next) => {
   try {
+    var board = db(boardname,"postSchema");
     //save to DB & send json
     var id = req.body.id;
     var text = req.body.text;
@@ -174,11 +174,12 @@ router.post('/board/:index/comment', (req, res, next) => {
       "time": time
     });
   }
-});
+});*/
 
 //write new post
-router.post('/board/write', (req, res, next) => {
+router.post('/board/:boardname/write', (req, res, next) => {
   try {
+    var board = db(req.params.boardname,"postSchema");
     var title = req.body.title;
     var contents = req.body.contents;
     var newDate = new Date();
@@ -203,10 +204,8 @@ router.post('/board/write', (req, res, next) => {
   };
 });
 
-//comment socket
 
 module.exports = router;
-
 
 /*
 comment data 구현
