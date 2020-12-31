@@ -113,10 +113,28 @@ postSchema.plugin(autoincrement.plugin,{
   increment : 1
 });
 
-module.exports = (req,schema_name)=>{
+module.exports = async (req,schema_name)=>{
   //check collection name 'req'\
-  var t = mongoose.connection.db.listCollections({name:req});
-console.log(t);
+  let list = await mongoose.connection.db.listCollections({
+    name:req
+  }).toArray();
+  if(list.length === 0 || list.name === "identitycounters"){
+    //no collection
+    return "no collection";
+  }
+  else{
+    //collection is exist
+    if(schema_name === "postSchema"){
+      return mongoose.model(req,postSchema,req);
+    }
+    else if(schema_name === "cntSchema"){
+      return mongoose.model(req,counterSchema,req);
+    }
+  }
+  /*if(list.length !== 0){
+    console.log(list.length);
+  }*/
+
   /*.next((err,collinfo)=>{
     if(collinfo){
       //if 'req' collection is exist
@@ -127,10 +145,5 @@ console.log(t);
       return err;
     }
   });*/
-  if(schema_name === "postSchema"){
-    return mongoose.model(req,postSchema,req);
-  }
-  else if(schema_name === "cntSchema"){
-    return mongoose.model(req,counterSchema,req);
-  }
+
 };

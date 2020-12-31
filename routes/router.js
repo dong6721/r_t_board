@@ -20,7 +20,13 @@ router.get('/', (req,res,next) => {
 // '/board/:boardindex'
 router.get('/board/:boardname', async (req, res, next) => {
   try {
-    var board = db(req.params.boardname,"postSchema");
+    var board = await db(req.params.boardname,"postSchema");
+    if(board === "no collection")
+    {
+      //not exist board
+      res.send("존재하지 않는 게시판입니다");
+      return;
+    }
     var post_list;
     /*var col = db("identitycounters", "cntSchema");
     col.findOne({ model: "board"},{_id:false,model:true,count:true},(err,docs)=>{
