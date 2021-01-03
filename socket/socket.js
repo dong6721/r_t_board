@@ -29,15 +29,15 @@ module.exports = (server) => {
     });
 
     //write new comment
-    socket.on("*",(event, data) => {
-      var board = db("board", "postSchema");
-      console.log(event);
-      console.log(data);
+    socket.on("*",async (event, data) => {
+      var board = await db("board", "postSchema");
+      console.log("socket.io coming\nevent name:",event,"\ndata name:",data);
       var evt = event.split('/');
       //check event
       if(evt[0] === "cmt"){
         if(evt[3] === "typing"){
           // 'cmt/:boardname/:postindex/typing'
+          console.log("typing action emit to:",event,"\ndata is:",data);
           socket.broadcast.emit(event,data);
           socket.emit(event,data);
         }
@@ -68,7 +68,6 @@ module.exports = (server) => {
                   console.log(err);
                 } else {
                   //save success
-                  console.log("saved!");
                   cmt_num = res.comment.length - 1;
                   //send broadcast
                   var broadcast_data = {
@@ -77,6 +76,8 @@ module.exports = (server) => {
                     comment: data.text,
                     date: time
                   };
+                  console.log("saved in",board.collection.collectionName,", data:",broadcast_data);
+                  console.log("emit to",event,"\ndata:",broadcast_data);
                   socket.broadcast.emit(event,broadcast_data);
                   socket.emit(event,broadcast_data);
                 }

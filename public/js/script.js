@@ -27,7 +27,7 @@ $(document).ready(function(){
       }),
       success:(res)=>{
         console.log(res);
-        window.location.href="./";
+        location.href=document.referrer;
         //alert("post is committed");
       },
       error:(req,status,err) => {
@@ -38,7 +38,7 @@ $(document).ready(function(){
   });
 
 
-  //test
+  //test comment
   $("#new_comment").click(()=> {
     new_cmt(2,"nickname","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Dis parturient montes nascetur ridiculus mus mauris vitae ultricies leo. Nibh nisl condimentum id venenatis. Diam sit amet nisl suscipit. Dolor purus non enim praesent elementum facilisis leo. Quam vulputate dignissim suspendisse in est ante in nibh mauris. Tristique senectus et netus et malesuada fames ac turpis. Tincidunt eget nullam non nisi est. Eu augue ut lectus arcu bibendum at varius vel pharetra. Tincidunt arcu non sodales neque sodales ut. Odio tempor orci dapibus ultrices in iaculis nunc sed augue. Purus in mollis nunc sed. Facilisi morbi tempus iaculis urna id volutpat. Proin fermentum leo vel orci porta non. Enim diam vulputate ut pharetra sit amet aliquam id. Et netus et malesuada fames. Amet nulla facilisi morbi tempus iaculis urna id.","2020-02-02 12:32:42");
     var autoheight = $("#cmt_id_2").height();
@@ -77,9 +77,10 @@ function new_cmt(id,nickname,text,date) {
   $("#cmt_list").append($input);
 }
 
+$(document).on("pageload",()=>{
+  window.location.reload(true);
+});
 
-
-// $(document).onload(function() {
+// $(window).onload(function() {
 //   //onload action(모든 페이지 구성요소 페인팅 완료 후)
-//
 // });

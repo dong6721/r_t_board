@@ -11,7 +11,7 @@
     });
     var post_index = $(location).attr('pathname').split("/");
 
-    socket.on('cmt/board/' + post_index[2], (data) => {
+    socket.on('cmt/'+post_index[2] + '/' + post_index[3], (data) => {
       //new comment coming!
       //console.log(data);
       //set new comment
@@ -25,7 +25,7 @@
         height: autoheight
       }, 500);
     });
-    socket.on('cmt/board/' + post_index[2] + '/typing', (data) => {
+    socket.on('cmt/'+post_index[2]+'/'+post_index[3]+'/typing', (data) => {
       //someone is typing comment contents or delete comment contents!
       var nickname = data.id;
       if(data.typing){
@@ -59,7 +59,7 @@
       }
       else {
         //someone delete contents
-        $('#'+nickname).animate({
+        $('#' + nickname).animate({
           height:1
         },500);
         setTimeout(()=>{
@@ -89,7 +89,9 @@
           "id": $("#cmt-input-id").text(),
           "text": cmt_text
         };
-        socket.emit('cmt/board/' + post_index[2], post_data);
+        cmt_input_text_emptycheck = true;
+        socket.emit('cmt/'+ post_index[2] + '/' + post_index[3] + "/typing", {typing:false,id:$("#cmt-input-id").text()});
+        socket.emit('cmt/' + post_index[2] + '/' + post_index[3], post_data);
         $("#cmt-input-text").val("");
         /*$.ajax({
           //댓글 달기 ajax (POST to /comment)
@@ -113,27 +115,25 @@
       });
 
 
-
-
       //comment typing effect
       var cmt_input_text_emptycheck = true;
       $("#cmt-input-text").on('input', (event) => {
         if ($.trim($("#cmt-input-text").val()) === "") {
           //emit to server nothing in comment
           cmt_input_text_emptycheck = true;
-          socket.emit('cmt/board/' + post_index[2] + "/typing", {typing:false,id:$("#cmt-input-id").text()});
+          socket.emit('cmt/'+ post_index[2] + '/' + post_index[3] + "/typing", {typing:false,id:$("#cmt-input-id").text()});
         }
         else if (cmt_input_text_emptycheck) {
           //emit to server I am typing
           cmt_input_text_emptycheck = false;
-          socket.emit('cmt/board/' + post_index[2] + "/typing", {typing:true,id:$("#cmt-input-id").text()});
+          socket.emit('cmt/'+ post_index[2] + '/' + post_index[3] + "/typing", {typing:true,id:$("#cmt-input-id").text()});
         }
       });
 
       //before webpage closing
       $(window).on("beforeunload", () => {
         //comment typing update
-        socket.emit('cmt/board/' + post_index[2] + "/typing", {typing:false,id:$("#cmt-input-id").text()});
+        socket.emit('cmt/'+ post_index[2] + '/' + post_index[3] + "/typing", {typing:false,id:$("#cmt-input-id").text()});
       });
     });
   </script>
