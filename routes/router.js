@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const router = express.Router();
 const db = require('../mongoose/schema');
 const clonedeep = require('lodash/clonedeep');
+const read_db = require('../mongoose/read_db');
 
 //body-bodyParser
 router.use(bodyParser.json());
@@ -11,9 +12,18 @@ router.use(bodyParser.urlencoded({
 }));
 
 //'/'
-router.get('/', (req,res,next) => {
+router.get('/', async (req,res,next) => {
+  var num = 1; //home board number
+  var home_board = new Array(num);
+  var board_name = new Array(num);
+  board_name[0] = "board";  //delete element
+  for(var i=0;i<num;i++){
+    home_board[i] = await read_db.get_post(board_name[i],0,3);
+  }
   res.render('home', {
-    nav: ["nav1", "nav2", "nav3", "nav4"]
+    nav: ["nav1", "nav2", "nav3", "nav4"],
+    board_name:board_name,
+    home_board:home_board,
   });
 });
 
@@ -28,6 +38,7 @@ router.get('/board/:boardname', async (req, res, next) => {
       return;
     }
     var post_list;
+
     /*var col = db("identitycounters", "cntSchema");
     col.findOne({ model: "board"},{_id:false,model:true,count:true},(err,docs)=>{
       cnt = docs.count;
@@ -38,6 +49,7 @@ router.get('/board/:boardname', async (req, res, next) => {
     }
 
     //console.time();   //시간측정
+
     await board.find({}, {
       _id: false,
       index: true,
@@ -74,16 +86,16 @@ router.get('/board/:boardname', async (req, res, next) => {
         }
       }
     });
-  } catch (e) {
-    console.log(e);
-    //error
-  } finally {
     //console.timeEnd();
     res.render('board', {
       nav: ["nav1", "nav2", "nav3", "nav4"],
       board_title: req.params.boardname,
       post_list: post_list
     });
+  } catch (e) {
+    console.log(e);
+    res.send(e);
+    //error
   }
 });
 
@@ -99,7 +111,7 @@ router.get('/board/:boardname/write', (req, res, next) => {
 //read post page
 router.get('/board/:boardname/:index', async (req, res, next) => {
   try{
-    var board = db(req.params.boardname,"postSchema");
+    var board = await db(req.params.boardname,"postSchema");
     //console.log(board.collection);
     var read_post;
     await board.findOne({index:req.params.index},(err,doc)=>{
@@ -127,16 +139,15 @@ router.get('/board/:boardname/:index', async (req, res, next) => {
       doc.viewcnt++;
       doc.save();
     });
-  }catch(e) {
-    console.log(e);
-    //error
-  }
-  finally {
     res.render('read', {
       nav: ["nav1","nav2","nav3","nav4"],
       board_title: req.params.boardname,
       read_post: read_post
     })
+  }catch(e) {
+    console.log(e);
+    res.send(e);
+    //error
   }
 });
 
@@ -183,9 +194,9 @@ router.get('/board/:boardname/:index', async (req, res, next) => {
 });*/
 
 //write new post
-router.post('/board/:boardname/write', (req, res, next) => {
+router.post('/board/:boardname/write', async (req, res, next) => {
   try {
-    var board = db(req.params.boardname,"postSchema");
+    var board = await db(req.params.boardname,"postSchema");
     var title = req.body.title;
     var contents = req.body.contents;
     var newDate = new Date();

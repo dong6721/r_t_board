@@ -1,3 +1,8 @@
-module.exports = () => {
-  return "test";
+module.exports = {
+  func: ()=> {
+    return "test";
+  },
+  method: (test)=> {
+    return test;
+  }
 }

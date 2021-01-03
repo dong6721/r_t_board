@@ -12,7 +12,7 @@
     <% for(var i=0;i<post_list.length;i++) {%>
     <li class="post-list-li">
       <span class="post-list-linumber"><%=post_list[i].index%></span>
-      <span class="post-list-lisubject"><a href="/board/<%=post_list[i].index%>"><%=post_list[i].subject%></a></span>
+      <span class="post-list-lisubject"><a href="./<%=board_title%>/<%=post_list[i].index%>"><%=post_list[i].subject%></a></span>
       <span class="post-list-liauthor"><%=post_list[i].author%></span>
       <span class="post-list-lidate"><%=post_list[i].date%></span>
       <span class="post-list-liseecount"><%=post_list[i].viewcnt%></span>
