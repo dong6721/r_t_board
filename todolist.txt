@@ -1,0 +1,20 @@
+TODO_LIST;
+
+
+FUNCTIONAL LIST:
+{
+메인페이지 board 별로 각 7개까지 출력하게 만들기
+
+각 board 페이지 구현 (한 페이지에 최대 20개)
+}
+
+
+ALGORITHM & CODE LIST:
+{
+read_db.js FILE writing , read & write database refactoring
+
+ejs & html file refactoring
+
+in router.js, divide element by module
+
+}
