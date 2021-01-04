@@ -306,6 +306,9 @@ button:hover {
   width:800px;
   border-right:1px solid white;
 }
+.post-list-lisubject a:hover{
+  text-decoration:underline;
+}
 .post-list-liauthor {
   width:130px;
   border-right:1px solid white;

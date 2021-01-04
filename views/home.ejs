@@ -11,8 +11,8 @@
   <div class="home-body-box">
     <a href="/board/<%=board_name[0]%>" class="home-body-boardname"><%=board_name[0]%></a>
     <!-- 최대 7개 -->
-    <% for(var i=0;i<3;i++) {%>
-      <a href="/board/<%=board_name[0]%>/<%=home_board[0][i].index%>" class="home-body-postname"><%=home_board[0][i].subject%></a>
+    <% for(var j=0;j<home_board[0].length;j++) {%>
+      <a href="/board/<%=board_name[0]%>/<%=home_board[0][j].index%>" class="home-body-postname"><%=home_board[0][j].subject%></a>
     <% } %>
   </div>
 </div>

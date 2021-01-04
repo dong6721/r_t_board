@@ -18,7 +18,8 @@ router.get('/', async (req,res,next) => {
   var board_name = new Array(num);
   board_name[0] = "board";  //delete element
   for(var i=0;i<num;i++){
-    home_board[i] = await read_db.get_post(board_name[i],0,3);
+    //게시물 7개까지 작성 가능
+    home_board[i] = await read_db.get_post(board_name[i],0,7);
   }
   res.render('home', {
     nav: ["nav1", "nav2", "nav3", "nav4"],

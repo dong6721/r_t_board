@@ -3,9 +3,9 @@ TODO_LIST;
 
 FUNCTIONAL LIST:
 {
-메인페이지 board 별로 각 7개까지 출력하게 만들기
+new board 만드는 기능
 
-각 board 페이지 구현 (한 페이지에 최대 20개)
+각 board 페이징기능 구현 (한 페이지에 최대 20개)
 }
 
 
@@ -15,6 +15,14 @@ read_db.js FILE writing , read & write database refactoring
 
 ejs & html file refactoring
 
-in router.js, divide element by module
+in router file, divide controller
 
+}
+
+
+
+추후 update:{
+LOGIN 기능 넣어서 id별로 작성가능하도록,
+
+관리자 page로 board 생성하도록 설정
 }
