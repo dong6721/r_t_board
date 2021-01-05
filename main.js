@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const port = 3000;
+const bodyParser = require('body-parser');
 const router = require('./routes/router.js');
 const app = express();
 //set socket
@@ -11,6 +12,12 @@ require('date-utils');    //time
 app.set('view engine','ejs');
 app.set('views',path.join(__dirname,'views'));
 app.engine('html', require('ejs').renderFile);
+
+//bodyParser
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 app.set("io", webSocket);
 

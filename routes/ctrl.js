@@ -1,7 +1,7 @@
 const read_db = require('../mongoose/read_db');
 
 module.exports = {
-  main: async (req,res,next) => {
+  main_page: async (req,res,next) => {
     var num = 1; //home board number
     var home_board = new Array(num);
     var board_name = new Array(num);
@@ -16,7 +16,7 @@ module.exports = {
       home_board:home_board
     });
   },
-  board_post_list: async (req, res, next) => {
+  board_post_list_page: async (req, res, next) => {
     try {
       //error처리
       /*var board = await db(req.params.boardname,"postSchema");
@@ -50,6 +50,42 @@ module.exports = {
       res.send(e);
     }
   },
+  write_page: (req, res, next) => {
+    res.render('write', {
+      nav: ["nav1", "nav2", "nav3", "nav4"],
+      board_title: req.params.boardname
+    });
+  },
+  read_page: async (req, res, next) => {
+    try{
+      //var board = await db(req.params.boardname,"postSchema");
+      //console.log(board.collection);
+      var read_post = await read_db.get_post_one(req.params.boardname,req.params.index,true,false);
+
+      res.render('read', {
+        nav: ["nav1","nav2","nav3","nav4"],
+        board_title: req.params.boardname,
+        read_post: read_post
+      })
+    }catch(e) {
+      //error
+      console.log(e);
+      res.send(e);
+    }
+  },
+
+  //POST
+  write_post: (req, res, next) => {
+    try {
+      read_db.create_new_post(req.params.boardname,
+      req.body.title,
+    req.body.contents,
+  new Date().toFormat('YYYY-MM-DD HH24:MI:SS'));
+  res.json("success!");
+    } catch (e) {
+      console.log("error : ", e);
+    };
+  }
 
 
 

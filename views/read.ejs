@@ -59,12 +59,13 @@
       }
       else {
         //someone delete contents
-        $('#' + nickname).animate({
-          height:1
-        },500);
-        setTimeout(()=>{
-          $('#'+nickname).remove();
-        },500);
+        $('#'+nickname).remove();
+        // $('#' + nickname).animate({
+        //   height:1
+        // },500);
+        // setTimeout(()=>{
+        //   $('#'+nickname).remove();
+        // },500);
       }
     });
 

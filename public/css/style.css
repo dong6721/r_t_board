@@ -102,6 +102,9 @@ button:hover {
   color:white;
   display:block;
 }
+.home-body-postname:hover {
+  text-decoration:underline;
+}
 
 /* board title block */
 .board-title-block {

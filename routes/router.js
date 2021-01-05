@@ -1,62 +1,22 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const router = express.Router();
-const db = require('../mongoose/schema');
-const clonedeep = require('lodash/clonedeep');
-const read_db = require('../mongoose/read_db');
+//const clonedeep = require('lodash/clonedeep');
 const controller = require('./ctrl');
 
-//body-bodyParser
-router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({
-  extended: true
-}));
 
-//'/'
-router.get('/', controller.main);
-// '/board/:boardindex'
-router.get('/board/:boardname', controller.board_post_list);
+//GET
+//'/'   home
+router.get('/', controller.main_page);
+// '/board/:boardindex' post list
+router.get('/board/:boardname', controller.board_post_list_page);
+// '/board/write'   write post
+router.get('/board/:boardname/write', controller.write_page);
+// '/board/read'    read post
+router.get('/board/:boardname/:index', controller.read_page);
 
-// '/board/write'
-router.get('/board/:boardname/write', (req, res, next) => {
-  res.render('write', {
-    nav: ["nav1", "nav2", "nav3", "nav4"],
-    board_title: req.params.boardname
-  });
-});
-
-// '/board/read'
-//read post page
-router.get('/board/:boardname/:index', async (req, res, next) => {
-  try{
-    //var board = await db(req.params.boardname,"postSchema");
-    //console.log(board.collection);
-    var read_post = await read_db.get_post_one(req.params.boardname,req.params.index,true,false);
-
-    res.render('read', {
-      nav: ["nav1","nav2","nav3","nav4"],
-      board_title: req.params.boardname,
-      read_post: read_post
-    })
-  }catch(e) {
-    console.log(e);
-    res.send(e);
-    //error
-  }
-});
-
-//write new post
-router.post('/board/:boardname/write', (req, res, next) => {
-  try {
-    read_db.create_new_post(req.params.boardname,
-    req.body.title,
-  req.body.contents,
-new Date().toFormat('YYYY-MM-DD HH24:MI:SS'));
-res.json("success!");
-  } catch (e) {
-    console.log("error : ", e);
-  };
-});
+//POST
+//'/board/:boardname/write'
+router.post('/board/:boardname/write', controller.write_post);
 
 
 module.exports = router;
