@@ -104,7 +104,22 @@ const counterSchema = new Schema({
   field: {
     type: String
   }
-})
+});
+
+//boarddata schema
+const boarddataSchema = new Schema({
+  board_name: {
+    type: String
+  },
+  postcnt: {
+    type : Number,
+    default: 0
+  },
+  active_post: {
+    type : Number,
+    default: 0
+  }
+});
 
 postSchema.plugin(autoincrement.plugin,{
   model : 'board',
@@ -115,22 +130,43 @@ postSchema.plugin(autoincrement.plugin,{
 
 module.exports = async (req,schema_name)=>{
   //check collection name 'req'\
-  let list = await mongoose.connection.db.listCollections({
+  /*let list = await mongoose.connection.db.listCollections({
     name:req
   }).toArray();
   if(list.length === 0 || list.name === "identitycounters"){
     //no collection
     return "no collection";
-  }
-  else{
-    //collection is exist
-    if(schema_name === "postSchema"){
-      return mongoose.model(req,postSchema,req);
+  }*/
+  let res;
+  await mongoose.model("boarddata",boarddataSchema,"boarddata").findOne({board_name:req},(err,doc)=>{
+    if(err) {
+      console.error(err);
+    };
+    res = doc;
+  });
+  try{
+    if(res === "")
+    {
+      //no board name here
+      return "no collection";
     }
-    else if(schema_name === "cntSchema"){
-      return mongoose.model(req,counterSchema,req);
+    else {
+      //collection is exist
+      if(schema_name === "postSchema"){
+        return mongoose.model(req,postSchema,req);
+      }
+      else if(schema_name === "cntSchema"){
+        return mongoose.model(req,counterSchema,req);
+      }
+      else if(schema_name === "boarddataSchema"){
+        return mongoose.model(req,boarddataSchema,req);
+      }
     }
   }
+  catch(err){
+    console.error(err);
+  }
+
   /*if(list.length !== 0){
     console.log(list.length);
   }*/

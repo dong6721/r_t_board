@@ -4,8 +4,12 @@ const port = 3000;
 const bodyParser = require('body-parser');
 const router = require('./routes/router.js');
 const app = express();
+const init = require('./init');
 //set socket
 const webSocket = require('./socket/socket');
+
+//initialize with server
+init();
 
 require('date-utils');    //time
 //set ejs

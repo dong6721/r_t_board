@@ -1,20 +1,28 @@
 const read_db = require('../mongoose/read_db');
+const db = require('../mongoose/schema');
+
 
 module.exports = {
   main_page: async (req,res,next) => {
-    var num = 1; //home board number
-    var home_board = new Array(num);
-    var board_name = new Array(num);
-    board_name[0] = "board";  //임시 value
-    for(var i=0;i<num;i++){
-      //게시물 7개까지 작성 가능
-      home_board[i] = await read_db.get_post(board_name[i],0,7);
+    try{
+      var num = 1; //home board number
+      var home_board = new Array(num);
+      var board_name = new Array(num);
+      board_name[0] = "board";  //임시 value
+      for(var i=0;i<num;i++){
+        //게시물 7개까지 작성 가능
+        home_board[i] = await read_db.get_post(board_name[i],0,7);
+      }
+      res.render('home', {
+        nav: ["nav1", "nav2", "nav3", "nav4"],
+        board_name:board_name,
+        home_board:home_board
+      });
     }
-    res.render('home', {
-      nav: ["nav1", "nav2", "nav3", "nav4"],
-      board_name:board_name,
-      home_board:home_board
-    });
+    catch(e){
+      console.log(e);
+      res.send(e);
+    }
   },
   board_post_list_page: async (req, res, next) => {
     try {
@@ -27,23 +35,29 @@ module.exports = {
         return;
       }*/
 
+      //paging system
+      if (req.query.page === undefined) {
+        //page = 1
+        req.query.page = 1;
+      }
+
+      let limit = 20; //1 page per document
+      let start = (req.query.page - 1) * limit;
+
       //console.time();
-      var post_list = await read_db.get_post(req.params.boardname,0,20);
+      var post_list = await read_db.get_post(req.params.boardname,start,limit);
       //console.timeEnd();
       /*var col = db("identitycounters", "cntSchema");
       col.findOne({ model: "board"},{_id:false,model:true,count:true},(err,docs)=>{
         cnt = docs.count;
       });*/
       //get DB page
-      if (req.query.page === undefined || req.query.page === 1) {
-        //page = 1
-      }
+
       res.render('board', {
         nav: ["nav1", "nav2", "nav3", "nav4"],
         board_title: req.params.boardname,
         post_list: post_list
       });
-
     } catch (e) {
       //error
       console.log(e);
