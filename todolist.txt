@@ -1,24 +1,18 @@
 TODO_LIST;
 
-
 FUNCTIONAL LIST:
 {
 new board 만드는 기능
-
-각 board 페이징기능 구현 (한 페이지에 최대 20개)
 }
 
 
 ALGORITHM & CODE LIST:
 {
-read_db.js FILE writing , read & write database refactoring
-
 ejs & html file refactoring
 
 in router file, divide controller
 
 }
-
 
 
 추후 update:{

@@ -32,4 +32,7 @@ HTML5 에 나온 새로운 기술인 WebSocket을 이용하여 구현할 가능�
 ws library와 socket.io library 둘 중 선택하여 WebSocket을 구현.
 후자는 WebSocket을 구현하지 못한다면, polling 방식으로 서버와 클라이언트가 통신함
 이러한 차이점에서 후자쪽이 좀 더 범용성있음. 단 node.js 환경에서만 구현됨.
+
+socket.io 를 이용하여 구현. 자세한 코드는 socket/socket.js 와 read.ejs file을 client & server side로 구성
+
 */

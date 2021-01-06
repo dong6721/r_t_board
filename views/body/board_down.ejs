@@ -4,8 +4,9 @@
     <button class="board-down-newpostbtn" onclick="location.href='/board/<%=board_title%>/write'">New Post</button>
   </div>
   <div class="board-down-pagelist">
-    <% for(var i = 1;i<=3;i++){%>
+    <% for(let i = start_page;i<=start_page + 10;i++){%>
       <a href="/board/<%=board_title%>?page=<%= i %>"><%= i %></a>
+      <% if(i === end_page) break; %>
     <% } %>
   </div>
 </div>

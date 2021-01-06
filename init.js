@@ -5,20 +5,17 @@ async function dbINIT() {
   console.log("INIT: Database Initialize start");
   console.log("INIT: database post counter init start")
   let bddata = await db("boarddata","boarddataSchema");
-  bddata.find({},{
-    _id:false,
-    board_name:true,
-    postcnt:true
-  },async (err,docs)=>{
-    for(let i=0;i<docs.length;i++){
-      let board = await db(docs[i].board_name,"postSchema");
-      let cnt = board.countDocuments({});
-      docs[i].postcnt = cnt;
-      docs[i].save();
-    }
-  });
-  console.log("INIT: database post counter init complete");
-
+  let list = await bddata.find();
+  console.log("INIT: board list length is :",list.length);
+  for(let i=0;i<list.length;i++){
+    console.log("INIT: board name '",list[i].board_name,"' is now updating...");
+    let name= list[i].board_name;
+    let board = await db(name,"postSchema");
+    let cnt = await board.countDocuments({});
+    bddata.updateOne({board_name:name},{postcnt:cnt});
+    console.log("INIT: board name '",list[i].board_name,"' update completed");
+  }
+  console.log("INIT: database post counter init complete");  
 }
 
 module.exports= ()=>{

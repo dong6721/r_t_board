@@ -114,5 +114,11 @@ module.exports = {
         console.error(e);
       }
     });
+  },
+
+  get_board_cnt: async (board_name) =>{
+    let boarddata = await db("boarddata","boarddataSchema");
+    let doc = await boarddata.findOne({board_name:board_name});
+    return doc.postcnt;
   }
 }

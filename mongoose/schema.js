@@ -109,7 +109,8 @@ const counterSchema = new Schema({
 //boarddata schema
 const boarddataSchema = new Schema({
   board_name: {
-    type: String
+    type: String,
+    unique:true
   },
   postcnt: {
     type : Number,

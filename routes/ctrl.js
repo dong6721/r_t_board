@@ -40,12 +40,18 @@ module.exports = {
         //page = 1
         req.query.page = 1;
       }
-
+      let cur_page = req.query.page;
+      //get end page number
+      let cnt = await read_db.get_board_cnt(req.params.boardname);
       let limit = 20; //1 page per document
+      let end_page =  Math.ceil(cnt / limit);
+      let start_page = Math.floor((cur_page - 1) / 10) * 10 + 1;
+
+      //get current page
       let start = (req.query.page - 1) * limit;
 
       //console.time();
-      var post_list = await read_db.get_post(req.params.boardname,start,limit);
+      let post_list = await read_db.get_post(req.params.boardname,start,limit);
       //console.timeEnd();
       /*var col = db("identitycounters", "cntSchema");
       col.findOne({ model: "board"},{_id:false,model:true,count:true},(err,docs)=>{
@@ -56,7 +62,10 @@ module.exports = {
       res.render('board', {
         nav: ["nav1", "nav2", "nav3", "nav4"],
         board_title: req.params.boardname,
-        post_list: post_list
+        post_list: post_list,
+        cur_page:cur_page,
+        start_page:start_page,
+        end_page:end_page
       });
     } catch (e) {
       //error
@@ -64,12 +73,14 @@ module.exports = {
       res.send(e);
     }
   },
+
   write_page: (req, res, next) => {
     res.render('write', {
       nav: ["nav1", "nav2", "nav3", "nav4"],
       board_title: req.params.boardname
     });
   },
+
   read_page: async (req, res, next) => {
     try{
       //var board = await db(req.params.boardname,"postSchema");
@@ -79,7 +90,8 @@ module.exports = {
       res.render('read', {
         nav: ["nav1","nav2","nav3","nav4"],
         board_title: req.params.boardname,
-        read_post: read_post
+        read_post: read_post,
+
       })
     }catch(e) {
       //error
