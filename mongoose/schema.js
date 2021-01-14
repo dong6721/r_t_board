@@ -1,12 +1,7 @@
 const mongoose = require('./mongoose');
 const Schema = mongoose.Schema;
 const autoincrement = require('mongoose-auto-increment');
-var connection = mongoose.createConnection("mongodb://localhost:27017/TFBoard",{
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-   useFindAndModify: false
-});
-autoincrement.initialize(connection);
+autoincrement.initialize(mongoose.connection);
 //schema 정리
 /*
 required: boolean or function, if true adds a required validator for this property
