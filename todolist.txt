@@ -3,17 +3,13 @@ TODO_LIST;
 FUNCTIONAL LIST:
 {
 new board 만드는 기능
+
+post delete 기능
+
+comment delete 기능
+
+login 기능
 }
-
-
-ALGORITHM & CODE LIST:
-{
-ejs & html file refactoring
-
-in router file, divide controller
-
-}
-
 
 추후 update:{
 LOGIN 기능 넣어서 id별로 작성가능하도록,

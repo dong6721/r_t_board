@@ -16,7 +16,7 @@ module.exports = {
     let board = await db(board_name, "postSchema");
     let post_list;
     try{
-      let docs = await board.find({},{}, {
+      let docs = await board.find({deleted:false},{}, {
         //sort 역방향
         sort: {
           index: -1
@@ -52,7 +52,7 @@ module.exports = {
     let board = await db(board_name,"postSchema");
     let read_post;
     try {
-      let doc = await board.findOne({index:index});
+      let doc = await board.findOne({index:index,deleted:false});
       read_post = {
         index: doc.index,
         subject: doc.title,
@@ -79,6 +79,22 @@ module.exports = {
     return read_post;
   },
 
+  cnt_update: async (board_name,number) =>{
+    let boarddata = await db("boarddata","boarddataSchema");
+    boarddata.findOne({board_name:board_name},(err,doc)=>{
+      if(err) {
+        console.error(err);
+      }
+      try{
+        doc.postcnt+=number;
+        doc.save();
+      }
+      catch(e){
+        console.error(e);
+      }
+    });
+  },
+
   create_new_post: async (board_name,title,contents,time) => {
     let board = await db(board_name, "postSchema");
     board.create({
@@ -95,22 +111,6 @@ module.exports = {
         console.log("success!");
       }
       catch(e) {
-        console.error(e);
-      }
-    });
-  },
-
-  cnt_update: async (board_name,number) =>{
-    let boarddata = await db("boarddata","boarddataSchema");
-    boarddata.findOne({board_name:board_name},(err,doc)=>{
-      if(err) {
-        console.error(err);
-      }
-      try{
-        doc.postcnt+=number;
-        doc.save();
-      }
-      catch(e){
         console.error(e);
       }
     });

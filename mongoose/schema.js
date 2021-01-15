@@ -57,6 +57,10 @@ const cmtSchema = new Schema({
   date: {   //작성 날짜
     type : Date,
     required: true
+  },
+  deleted: {
+    type : Boolean,
+    default : false
   }
 });
 //POST(게시물) schema
@@ -84,6 +88,10 @@ const postSchema = new Schema({
   goodcnt: {
     type:Number,
     default: 0
+  },
+  deleted: {
+    type : Boolean,
+    default : false
   },
   comment : [ cmtSchema ]
 });
@@ -117,22 +125,26 @@ const boarddataSchema = new Schema({
   }
 });
 
-postSchema.plugin(autoincrement.plugin,{
-  model : 'board',
-  field : 'index',
-  startAt : 1,
-  increment : 1
+//initialize auto autoincrement
+mongoose.model("boarddata",boarddataSchema,"boarddata").find({},(err,docs)=>{
+  if(err)
+  {
+    console.error(err);
+  }
+  for(let i=0;i<docs.length;i++)
+  {
+    console.log(`initialize ${docs[i].board_name} autoincrement data`)
+    postSchema.plugin(autoincrement.plugin,{
+      model: docs[i].board_name,
+      field: 'index',
+      startAt: 1,
+      increment: 1
+    });
+  };
 });
 
 module.exports = async (req,schema_name)=>{
-  //check collection name 'req'\
-  /*let list = await mongoose.connection.db.listCollections({
-    name:req
-  }).toArray();
-  if(list.length === 0 || list.name === "identitycounters"){
-    //no collection
-    return "no collection";
-  }*/
+  //check collection name
   let res;
   await mongoose.model("boarddata",boarddataSchema,"boarddata").findOne({board_name:req},(err,doc)=>{
     if(err) {
@@ -148,6 +160,7 @@ module.exports = async (req,schema_name)=>{
     }
     else {
       //collection is exist
+      //get model
       if(schema_name === "postSchema"){
         return mongoose.model(req,postSchema,req);
       }

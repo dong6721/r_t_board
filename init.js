@@ -11,11 +11,17 @@ async function dbINIT() {
     console.log("INIT: board name '",list[i].board_name,"' is now updating...");
     let name= list[i].board_name;
     let board = await db(name,"postSchema");
-    let cnt = await board.countDocuments({});
-    bddata.updateOne({board_name:name},{postcnt:cnt});
-    console.log("INIT: board name '",list[i].board_name,"' update completed");
+    let postcnt = await board.countDocuments({});
+    let activecnt = await board.countDocuments({deleted:false});
+    bddata.updateOne({board_name:name},{postcnt:postcnt,active_post:activecnt},(err,result)=>{
+      if(err)
+      {
+        console.error(err);
+      }
+    });
+    console.log("INIT: board name '",list[i].board_name,"' update complete");
   }
-  console.log("INIT: database post counter init complete");  
+  console.log("INIT: database post counter init complete");
 }
 
 module.exports= ()=>{

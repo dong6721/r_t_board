@@ -111,9 +111,17 @@ module.exports = {
     } catch (e) {
       console.log("error : ", e);
     };
+  },
+  delete_post: (req,res,next) =>{
+    try{
+      console.log(`board name: ${req.params.boardname}  post index:${req.body.index} request for deleteion has been received`);
+      //deleting...
+
+      res.json("success!");
+    }
+    catch(e) {
+      console.log("error : ", e);
+      res.json("error!");
+    };
   }
-
-
-
-
 }

@@ -17,7 +17,8 @@ router.get('/board/:boardname/:index', controller.read_page);
 //POST
 //'/board/:boardname/write'
 router.post('/board/:boardname/write', controller.write_post);
-
+//'/board/:boardname/:index/delete'
+router.post('/board/:boardname/:index/delete',controller.delete_post);
 
 module.exports = router;
 

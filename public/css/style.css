@@ -277,6 +277,24 @@ button:hover {
   font-size:20px;
 }
 
+/* post down block */
+.post-down-block {
+  margin-top: 30px;
+  overflow:hidden;
+}
+.post-down-deletebtn {
+  float:right;
+  font-size:20px;
+  padding:7px 12px;
+  margin-right:16px;
+}
+.post-down-modifiedbtn {
+  float:right;
+  font-size:20px;
+  padding:7px 24px;
+  margin-right:16px;
+}
+
 /* post list block */
 
 .post-list-block {

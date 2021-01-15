@@ -1,0 +1,8 @@
+<!-- post down block -->
+<div class="post-down-block">
+  <div class="board-down-newpost">
+    <button class="board-down-newpostbtn" onclick="location.href='/board/<%=board_title%>/write'">New Post</button>
+    <button class="post-down-deletebtn" onclick="deletepost('<%=board_title%>',<%=read_post.index%>)">Delete Post</button>
+    <button class="post-down-modifiedbtn" onclick="location.href='/board/<%=board_title%>/modified/<%=read_post.index%>'">Modified</button>
+  </div>
+</div>

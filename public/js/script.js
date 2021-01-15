@@ -51,6 +51,32 @@ $(document).ready(function(){
   });
 });
 
+function deletepost(board_title,index)
+{
+  if(confirm("delete?"))
+  {
+    //delete script
+    console.log($(location).attr('href') + "/delete");
+    $.ajax({
+      url: $(location).attr('href') + "/delete",
+      type:"POST",
+      dataType:"json",
+      contentType:"application/json",
+      data:
+      JSON.stringify({
+        index:index
+      }),
+      success:(res)=>{
+        alert(res);
+        location.href=`/board/${board_title}`;
+      }
+    });
+  }
+  else {
+    //nothing happend;;
+  }
+}
+
 function new_cmt(id,nickname,text,date) {
   //append new_cmt
   var $input = document.createElement('li');
