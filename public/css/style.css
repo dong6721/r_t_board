@@ -437,3 +437,24 @@ button:hover {
 .board-write-confirm {
   margin-right:16px;
 }
+
+/* err-handling-block */
+
+.err-handling-block {
+  overflow:hidden;
+}
+.err-handling-wrapper {
+  display:block;
+  margin:50px auto 0 auto;
+  height:320px;
+  width:480px;
+  background:gray;
+}
+.err-handling-textbox {
+  text-align:center;
+}
+.err-handling-textbox p {
+  padding-top:80px;
+  font-size:24px;
+  line-height:60px;
+}

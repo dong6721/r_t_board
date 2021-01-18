@@ -1,6 +1,27 @@
 const read_db = require('../mongoose/read_db');
 const db = require('../mongoose/schema');
+const basic_data = require('../data/basic_data');
 
+//error handling!
+let err_handling = (number,res)=>{
+  if(number === 404)
+  {
+    try{
+      res.status(404).render('404',{
+        nav: basic_data.nav_bar
+      });
+    }
+    catch(e) {
+      console.log("error : ",e);
+      res.send("error!");
+      //res.status(500).send("error handling!");
+    }
+  }
+  else if(number === 500)
+  {
+    res.status(500).send("something is broke...");
+  }
+}
 
 module.exports = {
   main_page: async (req,res,next) => {
@@ -14,14 +35,14 @@ module.exports = {
         home_board[i] = await read_db.get_post(board_name[i],0,7);
       }
       res.render('home', {
-        nav: ["nav1", "nav2", "nav3", "nav4"],
+        nav: basic_data.nav_bar,
         board_name:board_name,
         home_board:home_board
       });
     }
     catch(e){
       console.log(e);
-      res.send(e);
+      err_handling(500,res);
     }
   },
   board_post_list_page: async (req, res, next) => {
@@ -53,30 +74,36 @@ module.exports = {
       //console.time();
       let post_list = await read_db.get_post(req.params.boardname,start,limit);
       //console.timeEnd();
+
       /*var col = db("identitycounters", "cntSchema");
       col.findOne({ model: "board"},{_id:false,model:true,count:true},(err,docs)=>{
         cnt = docs.count;
       });*/
       //get DB page
-
-      res.render('board', {
-        nav: ["nav1", "nav2", "nav3", "nav4"],
-        board_title: req.params.boardname,
-        post_list: post_list,
-        cur_page:cur_page,
-        start_page:start_page,
-        end_page:end_page
-      });
+      if(post_list&&cur_page&&start_page&&end_page)
+      {
+        res.render('board', {
+          nav: basic_data.nav_bar,
+          board_title: req.params.boardname,
+          post_list: post_list,
+          cur_page:cur_page,
+          start_page:start_page,
+          end_page:end_page
+        });
+      }
+      else {
+        err_handling(404,res);
+      }
     } catch (e) {
       //error
       console.log(e);
-      res.send(e);
+      err_handling(500,res);
     }
   },
 
   write_page: (req, res, next) => {
     res.render('write', {
-      nav: ["nav1", "nav2", "nav3", "nav4"],
+      nav: basic_data.nav_bar,
       board_title: req.params.boardname
     });
   },
@@ -86,17 +113,22 @@ module.exports = {
       //var board = await db(req.params.boardname,"postSchema");
       //console.log(board.collection);
       var read_post = await read_db.get_post_one(req.params.boardname,req.params.index,true,false);
-
-      res.render('read', {
-        nav: ["nav1","nav2","nav3","nav4"],
-        board_title: req.params.boardname,
-        read_post: read_post,
-
-      })
+      if(read_post){
+        //get read_post success
+        res.render('read', {
+          nav: basic_data.nav_bar,
+          board_title: req.params.boardname,
+          read_post: read_post,
+        })
+      }
+      else {
+        //fail to get read_post;
+        err_handling(404,res);
+      }
     }catch(e) {
       //error
       console.log(e);
-      res.send(e);
+      err_handling(500,res);
     }
   },
 
@@ -110,18 +142,24 @@ module.exports = {
   res.json("success!");
     } catch (e) {
       console.log("error : ", e);
+      res.json("error!");
     };
   },
   delete_post: (req,res,next) =>{
     try{
       console.log(`board name: ${req.params.boardname}  post index:${req.body.index} request for deleteion has been received`);
       //deleting...
-
+      readdb.delete_one_post(req.body.index);
       res.json("success!");
     }
     catch(e) {
       console.log("error : ", e);
       res.json("error!");
     };
+  },
+
+  //404 handling
+  no_page: (req,res,next) =>{
+    err_handling(500,res);
   }
 }

@@ -25,11 +25,11 @@ app.use(bodyParser.urlencoded({
 
 app.set("io", webSocket);
 
-//set router
-app.use('/',router);
-
 //set static data
 app.use(express.static('public'));
+
+//set router
+app.use('/',router);
 
 const server = app.listen(port, () => {
   var newDate = new Date();

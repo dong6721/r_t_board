@@ -20,6 +20,8 @@ router.post('/board/:boardname/write', controller.write_post);
 //'/board/:boardname/:index/delete'
 router.post('/board/:boardname/:index/delete',controller.delete_post);
 
+router.use(controller.no_page);
+
 module.exports = router;
 
 /*
@@ -35,5 +37,4 @@ ws library와 socket.io library 둘 중 선택하여 WebSocket을 구현.
 이러한 차이점에서 후자쪽이 좀 더 범용성있음. 단 node.js 환경에서만 구현됨.
 
 socket.io 를 이용하여 구현. 자세한 코드는 socket/socket.js 와 read.ejs file을 client & server side로 구성
-
 */

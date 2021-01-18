@@ -53,25 +53,28 @@ module.exports = {
     let read_post;
     try {
       let doc = await board.findOne({index:index,deleted:false});
-      read_post = {
-        index: doc.index,
-        subject: doc.title,
-        contents:doc.contents,
-        author: doc.author,
-        date: get_time(doc.date),
-        viewcnt: doc.viewcnt,
-        goodcnt: doc.goodcnt,
-        comment: doc.comment
-      };
-      //post view call
-      if(view_call){
-        doc.viewcnt++;
+      if(doc)
+      {
+        read_post = {
+          index: doc.index,
+          subject: doc.title,
+          contents:doc.contents,
+          author: doc.author,
+          date: get_time(doc.date),
+          viewcnt: doc.viewcnt,
+          goodcnt: doc.goodcnt,
+          comment: doc.comment
+        };
+        //post view call
+        if(view_call){
+          doc.viewcnt++;
+        }
+        //post good call
+        if(good_call){
+          doc.goodcnt++;
+        }
+        doc.save();
       }
-      //post good call
-      if(good_call){
-        doc.goodcnt++;
-      }
-      doc.save();
     }
     catch(e) {
       console.error(e);
@@ -112,6 +115,17 @@ module.exports = {
       }
       catch(e) {
         console.error(e);
+      }
+    });
+  },
+  delete_one_post: async (board_name,index) => {
+    let board = await db(board_name, "postSchema");
+    board.updateOne({
+      index: index
+    },{deleted:true},(err,res)=>{
+      if(err)
+      {
+        console.log(res);
       }
     });
   },
