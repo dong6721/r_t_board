@@ -9,8 +9,9 @@
 </div>
 
 <!-- comment section -->
-<ul class="cmt_list" id="cmt_list">
+<ul class="cmt_list" id="cmt_list" indexid="<%=read_post.index%>">
   <% for(var i=0;i<read_post.comment.length;i++) { %>
+    <% if(read_post.comment[i].deleted === true) continue;%>
   <li>
     <div id="cmt_id_<%=i%>" class="comment-block">
       <div class="comment-nicknameBlock">
@@ -28,6 +29,11 @@
       <div class="comment-dateBlock">
         <div class="comment-dateBox">
           <p><%=read_post.comment[i].date.toFormat('YYYY-MM-DD HH24:MI:SS')%></p>
+        </div>
+      </div>
+      <div class="comment-deleteBlock">
+        <div class="comment-deleteBox">
+          <button class="comment-deletebtn">삭제</button>
         </div>
       </div>
     </div>

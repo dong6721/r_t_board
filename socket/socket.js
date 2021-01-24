@@ -1,5 +1,6 @@
 const SocketIO = require('socket.io');
 const db = require('../mongoose/schema');
+const read_db = require('../mongoose/read_db');
 
 //realtime comment socket io section
 module.exports = (server) => {
@@ -28,7 +29,6 @@ module.exports = (server) => {
       console.error(error);
     });
 
-    //write new comment
     socket.on("*",async (event, data) => {
       var board = await db("board", "postSchema");
       console.log("socket.io coming\nevent name:",event,"\ndata name:",data);
@@ -41,54 +41,42 @@ module.exports = (server) => {
           socket.broadcast.emit(event,data);
           socket.emit(event,data);
         }
-        else {
-          // 'cmt/:boardname/:postindex'
+        else if(evt[3] === "delete"){
+          // 'cmt/:boardname/:postindex/delete'
+          console.log("delete emit to:",event, "\ndata is:",data);
+          // update to db
+          socket.broadcast.emit(event,data);
+          socket.emit(event,data);
+        }
+        else if(evt[3] === "write"){
+          //write new comment
+          // 'cmt/:boardname/:postindex/write'
           try {
             //save to DB & send broadcast
             var newDate = new Date();
             var time = newDate.toFormat('YYYY-MM-DD HH24:MI:SS');
-            var cmt_num;
-            //save to DB
-            board.findOne({
-              index: evt[2]
-            }, (err, res) => {
-              if (err) {
-                console.log("find one error!", err);
-                return res.status(500).json({
-                  error: err
-                });
-              }
-              res.comment.push({
-                nickname: data.id,
-                comment: data.text,
-                date: time
-              });
-              res.save((err,res) => {
-                if (err) {
-                  console.log(err);
-                } else {
-                  //save success
-                  cmt_num = res.comment.length - 1;
-                  //send broadcast
-                  var broadcast_data = {
-                    cmt_id:cmt_num,
-                    nickname: data.id,
-                    comment: data.text,
-                    date: time
-                  };
-                  console.log("saved in",board.collection.collectionName,", data:",broadcast_data);
-                  console.log("emit to",event,"\ndata:",broadcast_data);
-                  socket.broadcast.emit(event,broadcast_data);
-                  socket.emit(event,broadcast_data);
-                }
-              });
-            });
+            //send data to DB server
+            let cmt_num = read_db.create_new_comment(evt[1],evt[2],data.id,data.text,time);
+            //send broadcast
+            var broadcast_data = {
+              cmt_id:cmt_num,
+              nickname: data.id,
+              comment: data.text,
+              date: time
+            };
+            console.log("saved in",board.collection.collectionName,", data:", broadcast_data);
+            console.log("emit to",event,"\ndate:",broadcast_data);
+            socket.broadcast.emit(event,broadcast_data);
+            socket.emit(event,broadcast_data);
           } catch (e) {
             //error
             console.log("error : ", e);
             socket.broadcast.emit(event,{id:data.id,err:"write_err"});
             socket.emit("error","cmt err!");
           }
+        }
+        else {
+          //nothing happend;
         }
       }
     });

@@ -1,6 +1,5 @@
 var db = require("./schema.js");
 
-
 let get_time = (time)=>{
   //time format redefinition
   var postTime = time.toFormat('YYYY-MM-DD');
@@ -9,7 +8,6 @@ let get_time = (time)=>{
   }
   return postTime;
 };
-
 module.exports = {
   get_post: async (board_name, num, num2) => {
     //get recently post list in 'board_name' range in num and num2
@@ -73,7 +71,6 @@ module.exports = {
         if(good_call){
           doc.goodcnt++;
         }
-        doc.save();
       }
     }
     catch(e) {
@@ -110,7 +107,7 @@ module.exports = {
         console.log("create fail", err);
       }
       try{
-        cnt_update(board_name,1);
+        count_update(board_name,1);
         console.log("success!");
       }
       catch(e) {
@@ -118,14 +115,40 @@ module.exports = {
       }
     });
   },
+
+  create_new_comment: async (board_name,index,id,contents,time)=>{
+    let board = await db(board_name, "postSchema");
+    let doc = await board.findOne({index:index});
+    if(!doc) {
+      console.log("create comment fail!",board_name,index,id,contents,time);
+      return console.log("find one error!", err);
+    };
+    doc.comment.push({
+      nickname: id,
+      comment: contents,
+      date: time
+    });
+    doc.save();
+    return doc.comment.length - 1;
+  },
+
   delete_one_post: async (board_name,index) => {
     let board = await db(board_name, "postSchema");
-    board.updateOne({
-      index: index
-    },{deleted:true},(err,res)=>{
-      if(err)
-      {
-        console.log(res);
+    board.updateOne({index: index},{deleted:true},(err,res)=>{
+      if(err){
+        console.log("post deleted error!",board_name,index);
+        return console.log(err);
+      }
+    });
+  },
+
+  delete_one_comment: async (board_name,index,cmt_index) => {
+    let board = await db(board_name, "postSchema");
+    let cmt_idx = cmt_index.split('_')[2];
+    board.updateOne({index:index},{comment[cmt_idx].deleted:true},(err,doc)=>{
+      if(err){
+        console.log("comment deleted error!",board_name,index,cmt_index);
+        return console.log(err);
       }
     });
   },

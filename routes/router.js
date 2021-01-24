@@ -19,7 +19,6 @@ router.get('/board/:boardname/:index', controller.read_page);
 router.post('/board/:boardname/write', controller.write_post);
 //'/board/:boardname/:index/delete'
 router.post('/board/:boardname/:index/delete',controller.delete_post);
-
 router.use(controller.no_page);
 
 module.exports = router;

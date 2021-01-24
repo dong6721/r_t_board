@@ -4,8 +4,6 @@ FUNCTIONAL LIST:
 {
 new board 만드는 기능
 
-post delete 기능
-
 comment delete 기능
 
 login 기능

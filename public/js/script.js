@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).ready(()=>{
   //ready action ( DOM Tree 생성 완료 후)
   $("#board-write-confirm").click(()=> {
     //send post
@@ -39,26 +39,32 @@ $(document).ready(function(){
 
 
   //test comment
-  $("#new_comment").click(()=> {
-    new_cmt(2,"nickname","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Dis parturient montes nascetur ridiculus mus mauris vitae ultricies leo. Nibh nisl condimentum id venenatis. Diam sit amet nisl suscipit. Dolor purus non enim praesent elementum facilisis leo. Quam vulputate dignissim suspendisse in est ante in nibh mauris. Tristique senectus et netus et malesuada fames ac turpis. Tincidunt eget nullam non nisi est. Eu augue ut lectus arcu bibendum at varius vel pharetra. Tincidunt arcu non sodales neque sodales ut. Odio tempor orci dapibus ultrices in iaculis nunc sed augue. Purus in mollis nunc sed. Facilisi morbi tempus iaculis urna id volutpat. Proin fermentum leo vel orci porta non. Enim diam vulputate ut pharetra sit amet aliquam id. Et netus et malesuada fames. Amet nulla facilisi morbi tempus iaculis urna id.","2020-02-02 12:32:42");
-    var autoheight = $("#cmt_id_2").height();
-    var autowidth = $("#cmt_id_2").width();
-    $("#cmt_id_2").css({height:0,width:0});
-    $("#cmt_id_2").animate({
-      height: autoheight,
-      width: autowidth
-    },500);
-  });
+  // $("#new_comment").click(()=> {
+  //   new_cmt(2,"nickname","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Dis parturient montes nascetur ridiculus mus mauris vitae ultricies leo. Nibh nisl condimentum id venenatis. Diam sit amet nisl suscipit. Dolor purus non enim praesent elementum facilisis leo. Quam vulputate dignissim suspendisse in est ante in nibh mauris. Tristique senectus et netus et malesuada fames ac turpis. Tincidunt eget nullam non nisi est. Eu augue ut lectus arcu bibendum at varius vel pharetra. Tincidunt arcu non sodales neque sodales ut. Odio tempor orci dapibus ultrices in iaculis nunc sed augue. Purus in mollis nunc sed. Facilisi morbi tempus iaculis urna id volutpat. Proin fermentum leo vel orci porta non. Enim diam vulputate ut pharetra sit amet aliquam id. Et netus et malesuada fames. Amet nulla facilisi morbi tempus iaculis urna id.","2020-02-02 12:32:42");
+  //   var autoheight = $("#cmt_id_2").height();
+  //   var autowidth = $("#cmt_id_2").width();
+  //   $("#cmt_id_2").css({height:0,width:0});
+  //   $("#cmt_id_2").animate({
+  //     height: autoheight,
+  //     width: autowidth
+  //   },500);
+  // });  
 });
 
-function deletepost(board_title,index)
-{
+let get_complete_url = (url)=>{
+  if(url[url.length-1] =='/' || url[url.length-1] == '?'){
+    return url.slice(0,-1);
+  }
+  return url;
+}
+
+let deletepost = (board_title,index)=>{
   if(confirm("delete?"))
   {
     //delete script
-    console.log($(location).attr('href') + "/delete");
+    //console.log($(location).attr('href') + "/delete");
     $.ajax({
-      url: $(location).attr('href') + "/delete",
+      url: get_complete_url($(location).attr('href')) + "/delete",
       type:"POST",
       dataType:"json",
       contentType:"application/json",
@@ -77,7 +83,7 @@ function deletepost(board_title,index)
   }
 }
 
-function new_cmt(id,nickname,text,date) {
+let new_cmt = (id,nickname,text,date)=> {
   //append new_cmt
   var $input = document.createElement('li');
   $input.innerHTML =
@@ -97,6 +103,11 @@ function new_cmt(id,nickname,text,date) {
     <div class="comment-dateBlock">
       <div class="comment-dateBox">
         <p>` + date + `</p>
+      </div>
+    </div>
+    <div class="comment-deleteBlock">
+      <div class="comment-deleteBox">
+        <button class="comment-deletebtn">삭제</button>
       </div>
     </div>
   </div>`;

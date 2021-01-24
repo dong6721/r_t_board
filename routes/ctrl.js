@@ -66,11 +66,14 @@ module.exports = {
       let cnt = await read_db.get_board_cnt(req.params.boardname);
       let limit = 20; //1 page per document
       let end_page =  Math.ceil(cnt / limit);
+      if(end_page == 0){
+        //no post in board
+        end_page = 1;
+      }
       let start_page = Math.floor((cur_page - 1) / 10) * 10 + 1;
 
       //get current page
       let start = (req.query.page - 1) * limit;
-
       //console.time();
       let post_list = await read_db.get_post(req.params.boardname,start,limit);
       //console.timeEnd();
@@ -147,9 +150,9 @@ module.exports = {
   },
   delete_post: (req,res,next) =>{
     try{
-      console.log(`board name: ${req.params.boardname}  post index:${req.body.index} request for deleteion has been received`);
+      console.log(`board name: ${req.params.boardname}  post index:${req.body.index} request for deletion has been received`);
       //deleting...
-      readdb.delete_one_post(req.body.index);
+      read_db.delete_one_post(req.params.boardname,req.body.index);
       res.json("success!");
     }
     catch(e) {
