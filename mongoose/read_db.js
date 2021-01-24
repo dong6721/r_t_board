@@ -63,14 +63,16 @@ module.exports = {
           goodcnt: doc.goodcnt,
           comment: doc.comment
         };
-        //post view call
-        if(view_call){
-          doc.viewcnt++;
-        }
         //post good call
+        let good_cnt = 0;
         if(good_call){
-          doc.goodcnt++;
+          good_cnt = 1;
         }
+        board.updateOne({index:index},{$inc:{viewcnt:1,goodcnt:good_cnt}},(err,res)=>{
+          if(err){
+            return console.error(err);
+          }
+        });
       }
     }
     catch(e) {
@@ -79,18 +81,13 @@ module.exports = {
     return read_post;
   },
 
-  cnt_update: async (board_name,number) =>{
+  cnt_update: async (board_name,number,number2) =>{
+    //count update in boarddata collection
+    //number is amount of post , number2 is amount of activated post(not deleted);
     let boarddata = await db("boarddata","boarddataSchema");
-    boarddata.findOne({board_name:board_name},(err,doc)=>{
-      if(err) {
-        console.error(err);
-      }
-      try{
-        doc.postcnt+=number;
-        doc.save();
-      }
-      catch(e){
-        console.error(e);
+    boarddata.updateOne({board_name:board_name},{$inc:{postcnt:number,active_post:number2}},(err,res)=>{
+      if(err){
+        return console.error(err);
       }
     });
   },
@@ -104,10 +101,10 @@ module.exports = {
       date: time
     }, (err, user) => {
       if (err) {
-        console.log("create fail", err);
+        console.error("create fail", err);
       }
       try{
-        count_update(board_name,1);
+        cnt_update(board_name,1,1);
         console.log("success!");
       }
       catch(e) {
@@ -137,7 +134,7 @@ module.exports = {
     board.updateOne({index: index},{deleted:true},(err,res)=>{
       if(err){
         console.log("post deleted error!",board_name,index);
-        return console.log(err);
+        return console.error(err);
       }
     });
   },
@@ -145,11 +142,9 @@ module.exports = {
   delete_one_comment: async (board_name,index,cmt_index) => {
     let board = await db(board_name, "postSchema");
     let cmt_idx = cmt_index.split('_')[2];
-    board.updateOne({index:index},{comment[cmt_idx].deleted:true},(err,doc)=>{
-      if(err){
-        console.log("comment deleted error!",board_name,index,cmt_index);
-        return console.log(err);
-      }
+    board.findOne({index:index},(err,doc)=>{
+      doc.comment[cmt_idx].deleted = true;
+      doc.save();
     });
   },
 

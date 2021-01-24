@@ -45,6 +45,7 @@ module.exports = (server) => {
           // 'cmt/:boardname/:postindex/delete'
           console.log("delete emit to:",event, "\ndata is:",data);
           // update to db
+          read_db.delete_one_comment(evt[1],evt[2],data.cmt_index);
           socket.broadcast.emit(event,data);
           socket.emit(event,data);
         }
