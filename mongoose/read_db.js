@@ -45,7 +45,7 @@ module.exports = {
     return post_list;
   },
 
-  get_post_one: async (board_name,index,view_call,good_call) => {
+  get_post_one: async (board_name,index) => {
     //get one post data
     let board = await db(board_name,"postSchema");
     let read_post;
@@ -63,22 +63,35 @@ module.exports = {
           goodcnt: doc.goodcnt,
           comment: doc.comment
         };
-        //post good call
-        let good_cnt = 0;
-        if(good_call){
-          good_cnt = 1;
-        }
-        board.updateOne({index:index},{$inc:{viewcnt:1,goodcnt:good_cnt}},(err,res)=>{
-          if(err){
-            return console.error(err);
-          }
-        });
+        return read_post;
       }
     }
     catch(e) {
       console.error(e);
+      return;
     }
-    return read_post;
+  },
+
+  view_good_call: async(board_name,index,view_call,good_call)=>{
+    try {
+      let board = await db(board_name,"postSchema");
+      //post good call
+      let view_cnt = 0;
+      if(view_call){
+        view_cnt = 1;
+      };
+      let good_cnt = 0;
+      if(good_call){
+        good_cnt = 1;
+      }
+      board.updateOne({index:index},{$inc:{viewcnt:view_cnt,goodcnt:good_cnt}},(err,res)=>{
+        if(err){
+          return console.error(err);
+        }
+      });
+    } catch (e) {
+      console.error(e);
+    }
   },
 
   cnt_update: async (board_name,number,number2) =>{
@@ -113,6 +126,15 @@ module.exports = {
     });
   },
 
+  modify_post: async (board_name,index,title,contents) =>{
+    let board = await db(board_name, "postSchema");
+    board.updateOne({index:index},{title:title,contents:contents},(err,res)=>{
+      if(err){
+        console.error(err);
+      }
+    });
+  },
+
   create_new_comment: async (board_name,index,id,contents,time)=>{
     let board = await db(board_name, "postSchema");
     let doc = await board.findOne({index:index});
@@ -142,6 +164,11 @@ module.exports = {
   delete_one_comment: async (board_name,index,cmt_index) => {
     let board = await db(board_name, "postSchema");
     let cmt_idx = cmt_index.split('_')[2];
+    // board.updateOne({index:index,"comment.$":cmt_idx},{"comment.$.deleted":true},(err,res)=>{
+    //   if(err){
+    //     return console.error(err);
+    //   }
+    // });
     board.findOne({index:index},(err,doc)=>{
       doc.comment[cmt_idx].deleted = true;
       doc.save();

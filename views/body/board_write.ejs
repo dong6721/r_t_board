@@ -2,14 +2,18 @@
 <div class="board-write-block">
   <div class="board-write-titleblock">
     <p>제목</p>
-    <input id="board-write-title" class="board-write-title" maxlength="64"></input>
+    <input id="board-write-title" class="board-write-title" maxlength="64" value="<%=read_post.subject%>"></input>
   </div>
   <div class="board-write-contentsblock">
     <p>내용</p>
-    <textarea id="board-write-contents" class="board-write-contents"></textarea>
+    <textarea id="board-write-contents" class="board-write-contents"><%=read_post.contents%></textarea>
   </div>
   <div class="board-write-buttonblock">
+    <%if(modifycheck) {%>
+      <button id="board-modify-confirm" class="board-write-confirm bold-text">confirm</button>
+    <% } else {%>
     <button id="board-write-confirm" class="board-write-confirm bold-text">confirm</button>
+    <% } %>
     <button class="board-write-cancel" onclick="location.href=document.referrer">cancel</button>
   </div>
 </div>

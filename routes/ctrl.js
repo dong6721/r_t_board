@@ -105,18 +105,31 @@ module.exports = {
   },
 
   write_page: (req, res, next) => {
-    res.render('write', {
-      nav: basic_data.nav_bar,
-      board_title: req.params.boardname
-    });
+    try {
+      res.render('write', {
+        nav: basic_data.nav_bar,
+        board_title: req.params.boardname,
+        modifycheck:false,
+        read_post:{
+          subject:"",
+          contents:""
+        },
+      });
+    } catch (e) {
+      //error
+      console.log(e);
+      err_handling(500,res);
+    }
   },
 
   read_page: async (req, res, next) => {
     try{
-      //var board = await db(req.params.boardname,"postSchema");
-      //console.log(board.collection);
-      var read_post = await read_db.get_post_one(req.params.boardname,req.params.index,true,false);
+      let read_post = await read_db.get_post_one(req.params.boardname,req.params.index);
       if(read_post){
+        //read_post contents setting
+        read_post.contents = read_post.contents.split(/(?:\r\n|\r|\n)/g);
+        //post view call
+        read_db.view_good_call(req.params.boardname,req.params.index,true,false);
         //get read_post success
         res.render('read', {
           nav: basic_data.nav_bar,
@@ -129,6 +142,26 @@ module.exports = {
         err_handling(404,res);
       }
     }catch(e) {
+      //error
+      console.log(e);
+      err_handling(500,res);
+    }
+  },
+
+  modify_page: async(req,res,next)=>{
+    try{
+      console.log("test");
+      var read_post = await read_db.get_post_one(req.params.boardname,req.params.index);
+      if(read_post){
+        res.render('modify', {
+          nav: basic_data.nav_bar,
+          board_title:req.params.boardname,
+          modifycheck:true,
+          read_post:read_post
+        });
+      }
+    }
+    catch(e) {
       //error
       console.log(e);
       err_handling(500,res);
@@ -148,6 +181,16 @@ module.exports = {
       res.json("error!");
     };
   },
+  modify_post: (req,res,next) => {
+    try {
+      //read_db control
+      read_db.modify_post(req.params.boardname,req.params.index,req.body.title,req.body.contents);
+      res.json("success!");
+    } catch (e) {
+      console.log("error : ",e);
+      res.json("error!");
+    }
+  },
   delete_post: (req,res,next) =>{
     try{
       console.log(`board name: ${req.params.boardname}  post index:${req.body.index} request for deletion has been received`);
@@ -163,6 +206,7 @@ module.exports = {
 
   //404 handling
   no_page: (req,res,next) =>{
+    //console.log("500 handling");
     err_handling(500,res);
   }
 }

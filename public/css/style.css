@@ -243,7 +243,7 @@ button:hover {
 }
 .comment-deleteBlock {
   float:left;
-  margin-top:8px;
+  margin-top:12px;
   width:10%;
 }
 .comment-deleteBox {
@@ -302,7 +302,7 @@ button:hover {
   padding:7px 12px;
   margin-right:16px;
 }
-.post-down-modifiedbtn {
+.post-down-modifybtn {
   float:right;
   font-size:20px;
   padding:7px 24px;

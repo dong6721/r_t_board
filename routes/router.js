@@ -3,22 +3,27 @@ const router = express.Router();
 //const clonedeep = require('lodash/clonedeep');
 const controller = require('./ctrl');
 
+router.route('/')
+      .get(controller.main_page); //'/home'   home
 
-//GET
-//'/'   home
-router.get('/', controller.main_page);
-// '/board/:boardindex' post list
-router.get('/board/:boardname', controller.board_post_list_page);
-// '/board/write'   write post
-router.get('/board/:boardname/write', controller.write_page);
-// '/board/read'    read post
-router.get('/board/:boardname/:index', controller.read_page);
+router.route('/board/:boardname')
+      .get(controller.board_post_list_page);  // '/board' post list
 
-//POST
-//'/board/:boardname/write'
-router.post('/board/:boardname/write', controller.write_post);
-//'/board/:boardname/:index/delete'
-router.post('/board/:boardname/:index/delete',controller.delete_post);
+router.route('/board/:boardname/write')
+      .get(controller.write_page) // '/write'   write post
+      .post(controller.write_post); //'/board/:boardname/write' write post ajax
+
+router.route('/board/:boardname/:index')
+      .get(controller.read_page); // '/read'    read post
+
+router.route('/board/:boardname/:index')
+      .get(controller.read_page)  // '/read'    read post
+      .put(controller.modify_post)  //'/board/:boardname/:index/modify' modify post ajax
+      .delete(controller.delete_post);  //'/board/:boardname/:index/delete' delete post ajax
+
+router.route('/board/:boardname/modify/:index')
+      .get(controller.modify_page); // '/modify' modified post
+
 router.use(controller.no_page);
 
 module.exports = router;

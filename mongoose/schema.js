@@ -175,20 +175,4 @@ module.exports = async (req,schema_name)=>{
   catch(err){
     console.error(err);
   }
-
-  /*if(list.length !== 0){
-    console.log(list.length);
-  }*/
-
-  /*.next((err,collinfo)=>{
-    if(collinfo){
-      //if 'req' collection is exist
-      console.log(req);
-
-    }
-    else{
-      return err;
-    }
-  });*/
-
 };

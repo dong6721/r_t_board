@@ -3,20 +3,15 @@ $(document).ready(()=>{
   $("#board-write-confirm").click(()=> {
     //send post
     var title = $("#board-write-title").val();
-    if($.trim(title) == ""){
-      alert("제목을 입력해주세요.");
-      return ;
-    }
     var contents = $("#board-write-contents").val();
-    if($.trim(contents) == "") {
-      alert("내용을 입력해주세요.");
-      return ;
+    if(check_write_post(title,contents)){
+      return;
     }
-    console.log(title);
-    console.log(contents);
+    // console.log(title);
+    // console.log(contents);
     $.ajax({
       //write post ajax
-      url:$(location).attr('href'),
+      url:get_complete_url($(location).attr('href')),
       type:"POST",
       dataType:"json",
       contentType:"application/json",
@@ -26,7 +21,7 @@ $(document).ready(()=>{
         "contents": contents
       }),
       success:(res)=>{
-        console.log(res);
+        //console.log(res);
         location.href=document.referrer;
         //alert("post is committed");
       },
@@ -36,7 +31,36 @@ $(document).ready(()=>{
       }
     });
   });
-
+  $("#board-modify-confirm").click(()=>{
+    //modify post
+    var title = $("#board-write-title").val();
+    var contents = $("#board-write-contents").val();
+    if(check_write_post(title,contents)){
+      return;
+    }
+    // console.log(title);
+    // console.log(contents);
+    $.ajax({
+      //modify post ajax
+      url:get_complete_url($(location).attr('href')).replace('/modify',''),
+      type:"PUT",
+      dataType:"json",
+      contentType:"application/json",
+      data:
+      JSON.stringify({
+        "title" : title,
+        "contents": contents
+      }),
+      success:(res)=>{
+        //console.log(res);
+        location.href=get_complete_url($(location).attr('href')).replace('/modify','');
+      },
+      error:(req,status,err) =>{
+        console.log("post error!",req.responseJSON.error);
+        alert("post error!");
+      }
+    });
+  });
 
   //test comment
   // $("#new_comment").click(()=> {
@@ -48,8 +72,21 @@ $(document).ready(()=>{
   //     height: autoheight,
   //     width: autowidth
   //   },500);
-  // });  
+  // });
 });
+
+let check_write_post = (title,contents)=>{
+  //check post in write
+  if($.trim(title) == ""){
+    alert("제목을 입력해주세요.");
+    return true;
+  }
+  if($.trim(contents) == "") {
+    alert("내용을 입력해주세요.");
+    return true;
+  }
+  return false;
+}
 
 let get_complete_url = (url)=>{
   if(url[url.length-1] =='/' || url[url.length-1] == '?'){
@@ -64,8 +101,8 @@ let deletepost = (board_title,index)=>{
     //delete script
     //console.log($(location).attr('href') + "/delete");
     $.ajax({
-      url: get_complete_url($(location).attr('href')) + "/delete",
-      type:"POST",
+      url: get_complete_url($(location).attr('href')),
+      type:"DELETE",
       dataType:"json",
       contentType:"application/json",
       data:
@@ -73,7 +110,7 @@ let deletepost = (board_title,index)=>{
         index:index
       }),
       success:(res)=>{
-        alert(res);
+        //alert(res);
         location.href=`/board/${board_title}`;
       }
     });

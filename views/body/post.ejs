@@ -14,6 +14,8 @@
     </div>
   </div>
   <div class="post-contents-block">
-    <p id="post-contents"><%=read_post.contents%></p>
+    <% for(let i=0;i<read_post.contents.length;i++) {%>
+      <p><%=read_post.contents[i]%></p>
+    <% } %>
   </div>
 </div>
