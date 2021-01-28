@@ -1,3 +1,4 @@
 {
-  "nav_bar": ["nav1","nav2","nav3","nav4"]
+  "nav_bar": ["board_list","nav2","nav3","nav4"],
+  "host_url": "http://localhost:3000"
 }

@@ -1,7 +1,5 @@
 const mongoose = require('./mongoose');
 const Schema = mongoose.Schema;
-const autoincrement = require('mongoose-auto-increment');
-autoincrement.initialize(mongoose.connection);
 //schema 정리
 /*
 required: boolean or function, if true adds a required validator for this property
@@ -96,19 +94,6 @@ const postSchema = new Schema({
   comment : [ cmtSchema ]
 });
 
-//identitycounters schema
-const counterSchema = new Schema({
-  count: {
-    type : Number
-  },
-  model: {
-    type : String
-  },
-  field: {
-    type: String
-  }
-});
-
 //boarddata schema
 const boarddataSchema = new Schema({
   board_name: {
@@ -123,24 +108,6 @@ const boarddataSchema = new Schema({
     type : Number,
     default: 0
   }
-});
-
-//initialize auto autoincrement
-mongoose.model("boarddata",boarddataSchema,"boarddata").find({},(err,docs)=>{
-  if(err)
-  {
-    console.error(err);
-  }
-  for(let i=0;i<docs.length;i++)
-  {
-    console.log(`initialize ${docs[i].board_name} autoincrement data`)
-    postSchema.plugin(autoincrement.plugin,{
-      model: docs[i].board_name,
-      field: 'index',
-      startAt: 1,
-      increment: 1
-    });
-  };
 });
 
 module.exports = async (req,schema_name)=>{
@@ -163,9 +130,6 @@ module.exports = async (req,schema_name)=>{
       //get model
       if(schema_name === "postSchema"){
         return mongoose.model(req,postSchema,req);
-      }
-      else if(schema_name === "cntSchema"){
-        return mongoose.model(req,counterSchema,req);
       }
       else if(schema_name === "boarddataSchema"){
         return mongoose.model(req,boarddataSchema,req);

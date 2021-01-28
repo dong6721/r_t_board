@@ -71,8 +71,8 @@ button:hover {
   background:white;
 }
 
-/*home body block */
-.home-body-block {
+/*home-board-list-block */
+.home-board-list-block {
   overflow:hidden;
   float:left;
   width:900px;
@@ -81,7 +81,7 @@ button:hover {
   border-left:1px solid white;
   border-right:1px solid white;
 }
-.home-body-box {
+.home-board-list-box {
   overflow:hidden;
   float:left;
   margin:4px 4px 4px 4px;
@@ -89,14 +89,14 @@ button:hover {
   width:440px;
   height:300px;
 }
-.home-body-boardname {
+.home-board-list-boardname {
   margin:8px 8px 4px 12px;
   border-bottom:1px solid white;
   font-size:36px;
   color:white;
   display:block;
 }
-.home-body-postname {
+.home-board-list-postname {
   margin:8px 0 8px 12px;
   font-size:18px;
   color:white;
@@ -120,6 +120,34 @@ button:hover {
   color:white;
   font-size:25px;
   margin-left:10px;
+}
+
+/* board list block */
+.board-list-block {
+  overflow:hidden;
+  margin-top:32px;
+  padding-right:2px;
+}
+.board-list-block > ul {
+}
+.board-list-contents {
+  overflow:hidden;
+  border:1px solid white;
+  padding:8px 0 8px 0;
+  color:white;
+}
+.board-list-boardname {
+  float:left;
+  margin:0 64px 0 12px;
+  font-size:26px;
+}
+.board-list-boardname a{
+  color:white;
+}
+.board-list-postcnt {
+  float:left;
+  font-size:12px;
+  margin-top:10px;
 }
 
 /*post block*/
@@ -343,6 +371,9 @@ button:hover {
 }
 .post-list-lisubject a:hover{
   text-decoration:underline;
+}
+.post-list-lisubject a:visited {
+  color:#646464;
 }
 .post-list-liauthor {
   width:130px;

@@ -8,6 +8,14 @@ let get_time = (time)=>{
   }
   return postTime;
 };
+
+let cnt_update = async (board_name,number,number2) =>{
+  //count update in boarddata collection
+  //number is amount of post , number2 is amount of activated post(not deleted);
+  let boarddata = await db("boarddata","boarddataSchema");
+  return await boarddata.findOneAndUpdate({board_name:board_name},{$inc:{postcnt:number,active_post:number2}},{new:true});
+};
+
 module.exports = {
   get_post: async (board_name, num, num2) => {
     //get recently post list in 'board_name' range in num and num2
@@ -94,20 +102,24 @@ module.exports = {
     }
   },
 
-  cnt_update: async (board_name,number,number2) =>{
-    //count update in boarddata collection
-    //number is amount of post , number2 is amount of activated post(not deleted);
+  create_new_board: async(board_name) => {
     let boarddata = await db("boarddata","boarddataSchema");
-    boarddata.updateOne({board_name:board_name},{$inc:{postcnt:number,active_post:number2}},(err,res)=>{
-      if(err){
-        return console.error(err);
+    boarddata.create({
+      board_name:board_name
+    },(err,user) => {
+      if(err) {
+        console.error("board create fail",err);
       }
     });
+    //board setting
+    db(0,0,true);
+    return ;
   },
 
   create_new_post: async (board_name,title,contents,time) => {
     let board = await db(board_name, "postSchema");
     board.create({
+      index: (await cnt_update(board_name,1,1)).postcnt,
       title: title,
       contents: contents,
       author: "nickname",
@@ -117,7 +129,6 @@ module.exports = {
         console.error("create fail", err);
       }
       try{
-        cnt_update(board_name,1,1);
         console.log("success!");
       }
       catch(e) {
@@ -159,6 +170,7 @@ module.exports = {
         return console.error(err);
       }
     });
+    cnt_update(board_name,0,-1);
   },
 
   delete_one_comment: async (board_name,index,cmt_index) => {
@@ -177,7 +189,25 @@ module.exports = {
 
   get_board_cnt: async (board_name) =>{
     let boarddata = await db("boarddata","boarddataSchema");
-    let doc = await boarddata.findOne({board_name:board_name});
-    return doc.postcnt;
-  }
+    let doc = await boarddata.findOne({board_name:board_name},{_id:false,postcnt:true});
+    if(doc){
+      return doc.postcnt;
+    }
+    return ;
+  },
+
+  get_board_data: async (board_name) =>{
+    if(board_name) {
+      //board_name document data
+      let boarddata = await db("boarddata","boarddataSchema");
+      let doc = await boarddata.find({board_name:board_name});
+      return doc;
+    }
+    else {
+      //all data
+      let boarddata = await db("boarddata","boarddataSchema");
+      let doc = await boarddata.find({});
+      return doc;
+    }
+  },
 }

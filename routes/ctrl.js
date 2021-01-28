@@ -26,16 +26,17 @@ let err_handling = (number,res)=>{
 module.exports = {
   main_page: async (req,res,next) => {
     try{
-      var num = 1; //home board number
-      var home_board = new Array(num);
-      var board_name = new Array(num);
-      board_name[0] = "board";  //임시 value
-      for(var i=0;i<num;i++){
-        //게시물 7개까지 작성 가능
-        home_board[i] = await read_db.get_post(board_name[i],0,7);
+      //get all of board data
+      let boarddata = await read_db.get_board_data();
+      let board_name = new Array();
+      let home_board = new Array();
+      for(let element of boarddata){
+        board_name.push(element.board_name);
+        home_board.push(await read_db.get_post(element.board_name,0,7)); //게시물 7개까지 작성 가능
       }
       res.render('home', {
         nav: basic_data.nav_bar,
+        host_url:basic_data.host_url,
         board_name:board_name,
         home_board:home_board
       });
@@ -45,17 +46,34 @@ module.exports = {
       err_handling(500,res);
     }
   },
+  boardname_check: async(req,res,next) => {
+    let data = await read_db.get_board_data(req.params.boardname);
+    if(data[0]){
+      next();
+    }
+    else {
+      err_handling(404,res);
+    }
+  },
+  board_list_page: async (req,res,next) => {
+    try {
+      let board_data = await read_db.get_board_data();
+      let board_list = new Array();
+      board_data.forEach((element)=>{
+        board_list.push({board_name:element.board_name,cnt:element.active_post});
+      });
+      res.render('list',{
+        nav: basic_data.nav_bar,
+        host_url:basic_data.host_url,
+        board_list:board_list,
+      });
+    } catch (e) {
+      console.log(e);
+      err_handling(500,res);
+    }
+  },
   board_post_list_page: async (req, res, next) => {
     try {
-      //error처리
-      /*var board = await db(req.params.boardname,"postSchema");
-      if(board === "no collection")
-      {
-        //not exist board
-        res.send("존재하지 않는 게시판입니다");
-        return;
-      }*/
-
       //paging system
       if (req.query.page === undefined) {
         //page = 1
@@ -78,15 +96,12 @@ module.exports = {
       let post_list = await read_db.get_post(req.params.boardname,start,limit);
       //console.timeEnd();
 
-      /*var col = db("identitycounters", "cntSchema");
-      col.findOne({ model: "board"},{_id:false,model:true,count:true},(err,docs)=>{
-        cnt = docs.count;
-      });*/
       //get DB page
       if(post_list&&cur_page&&start_page&&end_page)
       {
         res.render('board', {
           nav: basic_data.nav_bar,
+          host_url:basic_data.host_url,
           board_title: req.params.boardname,
           post_list: post_list,
           cur_page:cur_page,
@@ -108,6 +123,7 @@ module.exports = {
     try {
       res.render('write', {
         nav: basic_data.nav_bar,
+        host_url:basic_data.host_url,
         board_title: req.params.boardname,
         modifycheck:false,
         read_post:{
@@ -133,6 +149,7 @@ module.exports = {
         //get read_post success
         res.render('read', {
           nav: basic_data.nav_bar,
+          host_url:basic_data.host_url,
           board_title: req.params.boardname,
           read_post: read_post,
         })
@@ -155,6 +172,7 @@ module.exports = {
       if(read_post){
         res.render('modify', {
           nav: basic_data.nav_bar,
+          host_url:basic_data.host_url,
           board_title:req.params.boardname,
           modifycheck:true,
           read_post:read_post
@@ -169,6 +187,21 @@ module.exports = {
   },
 
   //POST
+  board_create: async (req,res,next) => {
+    try {
+      //overlap check;
+      let result = await read_db.get_board_data(req.body.board_name);
+      if(result[0]){
+        console.log(result);
+        res.json("overlap");
+      }
+      read_db.create_new_board(req.body.board_name);
+    }
+    catch(e) {
+      console.log("error : ",e);
+      res.json("error!");
+    }
+  },
   write_post: (req, res, next) => {
     try {
       read_db.create_new_post(req.params.boardname,

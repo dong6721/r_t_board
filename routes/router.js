@@ -6,23 +6,24 @@ const controller = require('./ctrl');
 router.route('/')
       .get(controller.main_page); //'/home'   home
 
+router.route('/board')
+      .get(controller.board_list_page) //'/board'  board list
+      .post(controller.board_create); //'/board' create new board;
+
 router.route('/board/:boardname')
-      .get(controller.board_post_list_page);  // '/board' post list
+      .get(controller.boardname_check,controller.board_post_list_page);  // '/board' post list
 
 router.route('/board/:boardname/write')
-      .get(controller.write_page) // '/write'   write post
+      .get(controller.boardname_check,controller.write_page) // '/write'   write post
       .post(controller.write_post); //'/board/:boardname/write' write post ajax
 
 router.route('/board/:boardname/:index')
-      .get(controller.read_page); // '/read'    read post
-
-router.route('/board/:boardname/:index')
-      .get(controller.read_page)  // '/read'    read post
+      .get(controller.boardname_check,controller.read_page)  // '/read'    read post
       .put(controller.modify_post)  //'/board/:boardname/:index/modify' modify post ajax
       .delete(controller.delete_post);  //'/board/:boardname/:index/delete' delete post ajax
 
 router.route('/board/:boardname/modify/:index')
-      .get(controller.modify_page); // '/modify' modified post
+      .get(controller.boardname_check,controller.modify_page); // '/modify' modified post
 
 router.use(controller.no_page);
 

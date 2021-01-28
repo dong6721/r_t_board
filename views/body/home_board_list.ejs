@@ -1,0 +1,15 @@
+<!-- home-board-list block -->
+<div class="home-board-list-block">
+  <% for(let i=0;i<home_board.length;i++) {%>
+    <div class="home-board-list-box">
+      <a href="/board/<%=board_name[i]%>" class="home-board-list-boardname"><%=board_name[i]%></a>
+      <!-- 최대 7개 -->
+      <% for(let j=0;j<home_board[i].length;j++) {%>
+        <a href="/board/<%=board_name[i]%>/<%=home_board[i][j].index%>" class="home-board-list-postname"><%=home_board[i][j].subject%></a>
+      <% } %>
+      <% if(home_board[i].length === 0) {%>
+        <p class="home-board-list-postname" style="color:#646464">there is no post</p>
+      <% } %>
+    </div>
+  <% } %>
+</div>

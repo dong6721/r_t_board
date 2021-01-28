@@ -3,7 +3,7 @@ const db = require('./mongoose/schema');
 //server start, initialize server data
 async function dbINIT() {
   console.log("INIT: Database Initialize start");
-  console.log("INIT: database post counter init start")
+  console.log("INIT: database post counter init start");
   let bddata = await db("boarddata","boarddataSchema");
   let list = await bddata.find();
   console.log("INIT: board list length is :",list.length);
@@ -26,5 +26,5 @@ async function dbINIT() {
 
 module.exports= ()=>{
   //database initialize
-  dbINIT();
+  dbINIT();  
 };

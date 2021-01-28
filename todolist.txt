@@ -2,9 +2,7 @@ TODO_LIST;
 
 FUNCTIONAL LIST:
 {
-new board 만드는 기능
-
-login 기능
+login 기능  <- this is the essential
 }
 
 추후 update:{

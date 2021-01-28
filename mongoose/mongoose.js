@@ -6,7 +6,8 @@ mongoose.set('useCreateIndex', true);
 mongoose.connect(mongoURL, {
   dbName: 'TFBoard',
   useUnifiedTopology: true,
-  useNewUrlParser: true
+  useNewUrlParser: true,
+  useFindAndModify: false,
 }, (err) => {
 if(err) {
     console.log('connect to mongoDB error',err);
