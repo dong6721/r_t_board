@@ -1,0 +1,59 @@
+<div class="wrapper-loginBox">
+    <form class="loginBox">
+        <div class="loginBox-title">
+            LOGIN
+        </div>
+        <div class="loginBox-block-login">
+            <div class="loginBox-login-idblock">
+                <div class="loginBox-login-idtext">아이디</div>
+                <input class="loginBox-id" id="userid" type="text" maxlength="999" spellcheck="false" value>
+            </div>
+            <div class="loginBox-login-passwordblock">
+                <div class="loginBox-login-passwordtext">비밀번호</div>
+                <input class="loginBox-password" id="userpassword" type="password" maxlength="999" spellcheck="false" value>
+            </div>
+        </div>
+        <div class="loginBox-confirmblock">
+            <button class="loginBox-confirmButton" type="button" value="log_in">
+              <div class="loginBox-confirmtext">
+                로그인
+              </div>
+            </button>
+        </div>
+        <div class="loginBox-newIdblock">
+          <button class="loginBox-newIdButton" type="button" value="log_in_new">
+            <div class="loginBox-newIdButtonText"> 회원가입</div>
+          </button>
+          <input class="loginBox-autoLogin" id="login-chk" type ="checkBox">
+          <label for="login-chk" class="loginBox-label">
+          자동 로그인</label>
+        </div>
+        <div class="errMessage" id="loginBox-errMessageBox">
+        </div>
+        <div class="loginBox-guest">
+          <button class="loginBox-guestButton" type="button" value="log_in_guest" disabled>
+            <div class="loginBox-guestButtonText">Guest로 플레이</div>
+          </button>
+        </div>
+    </form>
+</div>
+
+<div id="newIdDialog">
+  <form>
+    <div class="newIdBox-login-idblock">
+      <div class="loginBox-login-idtext">아이디</div>
+      <input class="loginBox-id" id="newuserid" type="text" maxlength="999" spellcheck="false" value>
+    </div>
+    <div class="newIdBox-login-passwordblock">
+      <div class="loginBox-login-passwordtext">비밀번호</div>
+      <input class="loginBox-password" id="newuserpassword" type ="password" maxlength="999" spellcheck="flase" value>
+    </div>
+    <div class="newIdBox-login-passwordblock2">
+      <div class="loginBox-login-passwordtext">비밀번호 확인</div>
+      <input class="loginBox-password" id="newuserpassword2" type ="password" maxlength="999" spellcheck="false" value>
+    </div>
+    <div class="errMessage" id="newIdBox-errMessageBox">
+    </div>
+  </div>
+  </form>
+</div>

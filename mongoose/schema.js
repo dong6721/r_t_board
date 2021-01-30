@@ -110,6 +110,22 @@ const boarddataSchema = new Schema({
   }
 });
 
+//login schema
+const userSchema = new Schema({
+  userid: {
+    type : String,
+    required: true,
+    unique: true,
+    lowercase: true
+  },
+  userps: {
+    type : String,
+    required: true,
+    trim: true
+  },
+  userpsbuf: String
+});
+
 module.exports = async (req,schema_name)=>{
   //check collection name
   let res;
@@ -133,6 +149,9 @@ module.exports = async (req,schema_name)=>{
       }
       else if(schema_name === "boarddataSchema"){
         return mongoose.model(req,boarddataSchema,req);
+      }
+      else if(schema_name === "userSchema") {
+        return mongoose.model(req,userSchema,req);
       }
     }
   }

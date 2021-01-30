@@ -1,0 +1,156 @@
+body{
+	background-color : #24292E;
+	min-width:500px;
+}
+
+.noTitleStuff .ui-dialog-titlebar {display:none}
+.wrapper-loginBox{
+	width:50%;
+	color:white;
+	background-color : #24292E;
+	width:450px;
+	height:650px;
+	position:absolute;
+	left:50%;
+	top:50%;
+	transform:translate(-50%,-50%);
+	box-shadow:-2px -2px 20px 2px black;
+	border:2px solid black;
+	border-radius:30px;
+}
+.loginBox{
+	position:relative;
+	margin-left:20px;
+	margin-right:20px;
+}
+.loginBox-title {
+	padding:20px;
+	resize:vertical;
+	text-align:center;
+	margin-top:50px;
+	text-shadow:black 5px 0 20px;
+	font-size:40px;
+}
+
+
+.loginBox-block-login {
+	margin-top:50px;
+}
+.loginBox-login-idblock {
+	margin-bottom:20px;
+}
+.loginBox-login-idtext {
+	margin-left:10px;
+}
+.loginBox-id{
+	transition: border-color 0.3s;
+	background-color: #24292E;
+	color:white;
+	width:100%;
+	padding:12px 20px;
+	box-sizing: border-box;
+	margin: 8px 0;
+}
+.loginBox-id:hover {
+	border-color:black;
+}
+.loginBox-id:focus {
+	border-color:red;
+	outline:none;
+}
+.loginBox-login-passwordblock {
+	margin-bottom:20px;
+}
+.loginBox-login-passwordtext {
+	margin-left:10px;
+}
+.loginBox-password{
+	transition: border-color 0.3s;
+	background-color: #24292E;
+	color:white;
+	width:100%;
+	padding:12px 20px;
+	box-sizing: border-box;
+	margin: 8px 0;
+}
+.loginBox-password:hover {
+	border-color:black;
+}
+.loginBox-password:focus {
+	border-color:red;
+	outline:none;
+}
+
+.loginBox-confirmblock {
+	margin-top:40px;
+}
+.loginBox-confirmButton {
+	width:100%;
+	padding:15px;
+	background-color:#ff3142;
+	outline:none;
+	border:0px;
+	text-decoration: none;
+  	overflow: hidden;
+  	cursor: pointer;
+  	transition: background-color 0.15s;
+}
+.loginBox-confirmButton:hover {
+	background-color:#9c0000;
+}
+.loginBox-confirmButton:active {
+
+}
+.loginBox-confirmtext {
+	color:white;
+	font-size:20px;
+	font-weight:bolder;
+}
+
+.loginBox-newIdButton {
+	background:none;
+	outline:none;
+	border:0px;
+	cursor:pointer
+}
+.loginBox-newIdButtonText {
+	color:white;
+	font-size:15px;
+}
+
+.loginBox-newIdblock {
+	margin-top:10px;
+}
+.loginBox-autoLogin{
+	float:right;
+}
+.loginBox-label {
+	float:right;
+}
+
+.loginBox-guest {
+	margin-top:40px;
+}
+.loginBox-guestButton {
+	width:100%;
+	padding:15px;
+	background:#179bce;
+	outline:none;
+	border:0px;
+	cursor:pointer;
+}
+.loginBox-guestButton:hover {
+	background:#174f7e;
+}
+.loginBox-guestButtonText {
+	color:white;
+}
+
+#newIdDialog {
+	color:white;
+}
+
+.errMessage {
+	margin-left:10px;
+	color:red;
+}

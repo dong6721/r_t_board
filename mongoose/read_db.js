@@ -210,4 +210,22 @@ module.exports = {
       return doc;
     }
   },
+
+  //login_part
+  get_login_data: async (id) => {
+    let userModel = await db("user","userSchema");
+    return await userModel.findOne({userid:id});
+  },
+  create_login_data: async (id,ps,psbuf)=>{
+    let userModel = await db("user","userSchema");
+    userModel.create({
+      userid: id,
+      userps: ps,
+      userpsbuf: psbuf
+    },(err)=>{
+      if(err){
+        return console.log(err);
+      }
+    });
+  },
 }

@@ -2,9 +2,18 @@ const express = require('express');
 const router = express.Router();
 //const clonedeep = require('lodash/clonedeep');
 const controller = require('./ctrl');
+const login_controller = require('./login_ctrl');
+
+router.use(login_controller.check_login);
 
 router.route('/')
       .get(controller.main_page); //'/home'   home
+
+router.route('/login')
+      .get(login_controller.login_page)  //'/login' login_page;
+      .post(login_controller.login_request);  // '/login' login request
+router.route('/login/register')
+      .post(login_controller.login_create); //'/login/register' new member post
 
 router.route('/board')
       .get(controller.board_list_page) //'/board'  board list
