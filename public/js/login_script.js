@@ -17,12 +17,13 @@ $(document).ready(function(){
 					console.log("login ",result);
 					if(result === "success!")
 					{
-						alert("login success!");
-						location.href = '/success';
+						//alert("login success!");
+						location.href = document.referrer;
 					}
 					else if(result === "fail!")
 					{
-						alert("login fail!");
+						//alert("login fail!");
+						//fail message to html
 					}
 				},
 				error:(request,status,error)=>{

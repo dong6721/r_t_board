@@ -4,14 +4,14 @@ const router = express.Router();
 const controller = require('./ctrl');
 const login_controller = require('./login_ctrl');
 
-router.use(login_controller.check_login);
-
 router.route('/')
       .get(controller.main_page); //'/home'   home
 
 router.route('/login')
       .get(login_controller.login_page)  //'/login' login_page;
       .post(login_controller.login_request);  // '/login' login request
+router.route('/logout')
+      .get(login_controller.logout_page); //'/logout' logout page;
 router.route('/login/register')
       .post(login_controller.login_create); //'/login/register' new member post
 

@@ -26,5 +26,5 @@ async function dbINIT() {
 
 module.exports= ()=>{
   //database initialize
-  dbINIT();  
+  dbINIT();
 };

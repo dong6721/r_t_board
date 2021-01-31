@@ -1,4 +1,5 @@
 <!-- post down block -->
+<% if(login_data) { %>
 <div class="post-down-block">
   <div class="board-down-newpost">
     <button class="board-down-newpostbtn" onclick="location.href='/board/<%=board_title%>/write'">New Post</button>
@@ -6,3 +7,4 @@
     <button class="post-down-modifybtn" onclick="location.href='/board/<%=board_title%>/modify/<%=read_post.index%>'">Modify</button>
   </div>
 </div>
+<% } %>

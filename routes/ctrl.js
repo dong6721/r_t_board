@@ -8,7 +8,9 @@ let err_handling = (number,res)=>{
   {
     try{
       res.status(404).render('404',{
-        nav: basic_data.nav_bar
+        nav: basic_data.nav_bar,
+        host_url:basic_data.host_url,
+        login_data:req.session.login,
       });
     }
     catch(e) {
@@ -37,6 +39,7 @@ module.exports = {
       res.render('home', {
         nav: basic_data.nav_bar,
         host_url:basic_data.host_url,
+        login_data:req.session.login,
         board_name:board_name,
         home_board:home_board
       });
@@ -65,6 +68,7 @@ module.exports = {
       res.render('list',{
         nav: basic_data.nav_bar,
         host_url:basic_data.host_url,
+        login_data:req.session.login,
         board_list:board_list,
       });
     } catch (e) {
@@ -102,6 +106,7 @@ module.exports = {
         res.render('board', {
           nav: basic_data.nav_bar,
           host_url:basic_data.host_url,
+          login_data:req.session.login,
           board_title: req.params.boardname,
           post_list: post_list,
           cur_page:cur_page,
@@ -124,6 +129,7 @@ module.exports = {
       res.render('write', {
         nav: basic_data.nav_bar,
         host_url:basic_data.host_url,
+        login_data:req.session.login,
         board_title: req.params.boardname,
         modifycheck:false,
         read_post:{
@@ -150,6 +156,7 @@ module.exports = {
         res.render('read', {
           nav: basic_data.nav_bar,
           host_url:basic_data.host_url,
+          login_data:req.session.login,
           board_title: req.params.boardname,
           read_post: read_post,
         })
@@ -173,6 +180,7 @@ module.exports = {
         res.render('modify', {
           nav: basic_data.nav_bar,
           host_url:basic_data.host_url,
+          login_data:req.session.login,
           board_title:req.params.boardname,
           modifycheck:true,
           read_post:read_post

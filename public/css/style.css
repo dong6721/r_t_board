@@ -19,7 +19,6 @@ p {
 }
 a {
   text-decoration:none;
-
 }
 button {
   cursor:pointer;
@@ -32,6 +31,9 @@ button {
 button:hover {
   background-color:#9c0000;
 }
+strong {
+  color:ORANGE;
+}
 
 /* common */
 .bold-text {
@@ -40,9 +42,8 @@ button:hover {
 
 /*nav bar block*/
 .nav-block {
-
 }
-.background {
+.nav-bar-background {
   position:absolute;
   background:orange;
   width:100%;
@@ -51,6 +52,28 @@ button:hover {
   height:62px;
 }
 .nav-main-block {
+  overflow:hidden;
+}
+.nav-main-block > a {
+  float:left;
+}
+.nav-login-block {
+  float:right;
+  display:block;
+  width:300px;
+  height:100px;
+}
+.nav-login-block > button{
+  float:right;
+  margin:16px 16px 0 0;
+  padding:8px 16px 8px 16px;
+  font-size:16px;
+}
+.nav-login-block > p {
+  float:right;
+  margin:16px 16px 0 0;
+  font-size:16px;
+  color:white;
 }
 .nav-bar {
   overflow:hidden;
@@ -216,6 +239,10 @@ button:hover {
   float:right;
   margin-right:5px;
 }
+.cmt_list {
+  padding-bottom:32px;
+  border-bottom:1px solid white;
+}
 .comment-block {
   width:100%;
   font-size:15px;
@@ -287,8 +314,7 @@ button:hover {
   width:100%;
   font-size:15px;
   overflow:hidden;
-  margin-top:35px;
-  border-top:1px solid white;
+  margin-top:12px;
   padding-top:15px;
 }
 

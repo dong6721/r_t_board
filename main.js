@@ -1,5 +1,7 @@
 const express = require('express');
 const path = require('path');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const port = 3000;
 const bodyParser = require('body-parser');
 const router = require('./routes/router.js');
@@ -21,6 +23,17 @@ app.engine('html', require('ejs').renderFile);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
+}));
+
+//session
+app.use(session({
+  secret: 'secret test',
+  resave: false,
+  saveUninitialized: true,
+  name:'se_id',
+  store:new MongoStore({
+    mongooseConnection: require('mongoose').connection
+  })
 }));
 
 app.set("io", webSocket);

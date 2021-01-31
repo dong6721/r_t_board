@@ -3,31 +3,34 @@ const basic_data = require('../data/basic_data');
 const crypto = require ('crypto');
 
 module.exports = {
-  check_login: (req,res,next)=> {
-    console.log("check_login pattern");
-    let login_bool = true;
-    if(login_bool){
-      //login_user
-      next();
-    }
-    else {
-      //login check fail
-      res.redirect(basic_data.host_url);
-    }
-  },
   //get
   //main_page
   login_page: (req,res,next)=> {
-    //session part
-    // console.log(req.sessionID);
-    // if(req.session.login === "login"){
-    //   req.session.login = "test";
-    //   res.redirect('/success');
-    // }
-    // else {
-    //   res.render('login_home');
-    // }
-    res.render('login_home');
+    if(req.session.login){
+      //already login data is in
+      if(req.headers.referer) { //redirect to post page or main_page
+        res.redirect(req.headers.referer);
+      }
+      else {
+        res.redirect(basic_data.host_url);
+      }
+    }
+    else {
+      res.render('login_home');
+    }
+  },
+  logout_page: (req,res,next)=>{
+    //delete login data from session
+    if(req.session.login) {
+      req.session.login = undefined;
+    }
+    //redirect to post page or main_page
+    if(req.headers.referer) {
+      res.redirect(req.headers.referer);
+    }
+    else {
+      res.redirect(basic_data.host_url);
+    }
   },
 
   //post
@@ -42,7 +45,9 @@ module.exports = {
       }
       crypto.pbkdf2(req.body.ps, doc.userpsbuf , 100000, 64, 'sha512', (err,key)=>{
         if(key.toString().trim() == doc.userps){
-          //req.session.login = "login";    //로그인 세션인증이 필요.
+          req.session.login = {
+            id:doc.userid,
+          };
           console.log("login success");
           res.json("success!");
         }

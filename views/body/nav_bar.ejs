@@ -4,8 +4,24 @@
     <a href="http://localhost:3000">
       <img src="/img/logo.jpg">
     </a>
+    <div class="nav-login-block">
+      <% if(login_data) { %>
+      <!-- logining -->
+      <button id="nav-login-logout" onclick="if(confirm('로그아웃 하시겠습니까?')){location.href='<%=host_url%>/logout'}">
+        logout
+      </button>
+      <p>
+        <strong><%=login_data.id%></strong> is now Logging in
+      </p>
+      <% } else { %>
+      <!-- not login -->
+      <button id="nav-login-login" onclick="location.href='<%=host_url%>/login'">
+        login
+      </button>
+      <% } %>
+    </div>
   </div>
-  <div class="background"></div>
+  <div class="nav-bar-background"></div>
   <div class="nav-bar">
     <% for(var i=0;i < nav.length;i++) { %>
     <span class="nav-bar-item">
