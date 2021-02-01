@@ -120,37 +120,6 @@ let deletepost = (board_title,index)=>{
   }
 }
 
-let new_cmt = (id,nickname,text,date)=> {
-  //append new_cmt
-  var $input = document.createElement('li');
-  $input.innerHTML =
-  `<div id="cmt_id_`+id+`"class="comment-block">
-    <div class="comment-nicknameBlock">
-      <div class="comment-nicknameBox">
-        <p>` + nickname + `</p>
-      </div>
-    </div>
-    <div class="comment-inputtextBlock">
-      <div class="comment-inputtextBox">
-        <hgroup class="speech-bubble" role="textbox" maxlength="999" spellcheck="false">
-          <p>` + text + `</p>
-        </hgroup>
-      </div>
-    </div>
-    <div class="comment-dateBlock">
-      <div class="comment-dateBox">
-        <p>` + date + `</p>
-      </div>
-    </div>
-    <div class="comment-deleteBlock">
-      <div class="comment-deleteBox">
-        <button class="comment-deletebtn">삭제</button>
-      </div>
-    </div>
-  </div>`;
-  $("#cmt_list").append($input);
-}
-
 $(document).on("pageload",()=>{
   window.location.reload(true);
 });

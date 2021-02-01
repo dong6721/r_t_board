@@ -16,6 +16,7 @@
 
 
 <!-- board-create 임시 -->
+<% if(login_data && login_data.admin === true) {%>
 <div class="board-create-block">
   <input id="board-create-boardname" maxlength="20"></input>
   <button id="board-create-button">create board</button>
@@ -69,3 +70,4 @@ $(document).ready(()=>{
     });
 });
 </script>
+<% } %>

@@ -48,6 +48,10 @@ const cmtSchema = new Schema({
     type : String,
     required: true
   },
+  uid: {
+    type : Number,
+    required: true
+  },
   comment: { //comment 내용
     type : String,
     required: true
@@ -64,8 +68,8 @@ const cmtSchema = new Schema({
 //POST(게시물) schema
 const postSchema = new Schema({
   index: {
-    type: Number,
-    unique:true
+    type : Number,
+    unique : true
   },
   title: {
     type : String
@@ -75,6 +79,9 @@ const postSchema = new Schema({
   },
   author: {
     type : String
+  },
+  uid: {
+    type : Number
   },
   date: {
     type:Date
@@ -112,6 +119,10 @@ const boarddataSchema = new Schema({
 
 //login schema
 const userSchema = new Schema({
+  uid: {
+    type : Number,
+    unique : true
+  },
   userid: {
     type : String,
     required: true,
@@ -123,7 +134,24 @@ const userSchema = new Schema({
     required: true,
     trim: true
   },
-  userpsbuf: String
+  userpsbuf: String,
+  admin: {
+    type : String,
+    Default:""
+  },
+});
+
+//session schema
+const sessionSchema = new Schema({
+  _id: {
+    type : String,
+  },
+  expires: {
+    type: Date,
+  },
+  session: {
+    type: String,
+  },
 });
 
 module.exports = async (req,schema_name)=>{
@@ -152,6 +180,9 @@ module.exports = async (req,schema_name)=>{
       }
       else if(schema_name === "userSchema") {
         return mongoose.model(req,userSchema,req);
+      }
+      else if(schema_name === "sessionSchema") {
+        return mongoose.model(req,sessionSchema,req);
       }
     }
   }

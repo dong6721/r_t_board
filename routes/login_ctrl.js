@@ -47,6 +47,11 @@ module.exports = {
         if(key.toString().trim() == doc.userps){
           req.session.login = {
             id:doc.userid,
+            uid:doc.uid,
+          };
+          if(doc.admin) {
+            console.log("관리자 로그인:",doc.userid);
+            req.session.login.admin = doc.admin;
           };
           console.log("login success");
           res.json("success!");

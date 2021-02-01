@@ -4,7 +4,7 @@ const mongoURL = "mongodb://localhost:27017/default"
 
 mongoose.set('useCreateIndex', true);
 mongoose.connect(mongoURL, {
-  dbName: 'TFBoard',
+  dbName: 'RTBoard',
   useUnifiedTopology: true,
   useNewUrlParser: true,
   useFindAndModify: false,

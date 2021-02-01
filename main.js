@@ -19,24 +19,26 @@ app.set('view engine','ejs');
 app.set('views',path.join(__dirname,'views'));
 app.engine('html', require('ejs').renderFile);
 
+
 //bodyParser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 
+app.set("io", webSocket);
+
 //session
 app.use(session({
-  secret: 'secret test',
+  secret: 'secret',
   resave: false,
   saveUninitialized: true,
-  name:'se_id',
+  name:'session_id',
+  //cookie: {secure:true},  //https option
   store:new MongoStore({
     mongooseConnection: require('mongoose').connection
   })
 }));
-
-app.set("io", webSocket);
 
 //set static data
 app.use(express.static('public'));

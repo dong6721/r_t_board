@@ -128,24 +128,6 @@ body{
 	float:right;
 }
 
-.loginBox-guest {
-	margin-top:40px;
-}
-.loginBox-guestButton {
-	width:100%;
-	padding:15px;
-	background:#179bce;
-	outline:none;
-	border:0px;
-	cursor:pointer;
-}
-.loginBox-guestButton:hover {
-	background:#174f7e;
-}
-.loginBox-guestButtonText {
-	color:white;
-}
-
 #newIdDialog {
 	color:white;
 }

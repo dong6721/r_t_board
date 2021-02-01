@@ -28,6 +28,7 @@ let err_handling = (number,res)=>{
 module.exports = {
   main_page: async (req,res,next) => {
     try{
+      //console.log(req.session.login.id);
       //get all of board data
       let boarddata = await read_db.get_board_data();
       let board_name = new Array();
@@ -51,7 +52,7 @@ module.exports = {
   },
   boardname_check: async(req,res,next) => {
     let data = await read_db.get_board_data(req.params.boardname);
-    if(data[0]){
+    if(data){
       next();
     }
     else {
@@ -65,6 +66,7 @@ module.exports = {
       board_data.forEach((element)=>{
         board_list.push({board_name:element.board_name,cnt:element.active_post});
       });
+      console.log(req.session.login);
       res.render('list',{
         nav: basic_data.nav_bar,
         host_url:basic_data.host_url,
@@ -197,11 +199,14 @@ module.exports = {
   //POST
   board_create: async (req,res,next) => {
     try {
+      if(req.body.board_name === /(?:boarddata|user|sessions)/g) {
+        return res.json("사용할 수 없는 이름입니다.");
+      }
       //overlap check;
       let result = await read_db.get_board_data(req.body.board_name);
-      if(result[0]){
-        console.log(result);
-        res.json("overlap");
+      if(result){
+        //console.log(result);
+        return res.json("overlap");
       }
       read_db.create_new_board(req.body.board_name);
     }
@@ -215,6 +220,8 @@ module.exports = {
       read_db.create_new_post(req.params.boardname,
       req.body.title,
     req.body.contents,
+    req.session.login.id,
+    req.session.login.uid,
   new Date().toFormat('YYYY-MM-DD HH24:MI:SS'));
   res.json("success!");
     } catch (e) {

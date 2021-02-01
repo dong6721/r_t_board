@@ -1,3 +1,43 @@
+let new_cmt = (id,mine,nickname,text,date)=> {
+  //append new_cmt
+  var $input = document.createElement('li');
+  $input.innerHTML =
+  `<div id="cmt_id_${id}"class="comment-block">
+    <div class="comment-nicknameBlock">
+      <div class="comment-nicknameBox">
+        <p>${nickname}</p>
+      </div>
+    </div>
+    <div class="comment-inputtextBlock">
+      <div class="comment-inputtextBox">
+        <hgroup class="speech-bubble" role="textbox" maxlength="999" spellcheck="false">
+          <p>${text}</p>
+        </hgroup>
+      </div>
+    </div>
+    <div class="comment-dateBlock">
+      <div class="comment-dateBox">
+        <p>${date}</p>
+      </div>
+    </div>`;
+  if(mine) {
+    $input.innerHTML +=`<div class="comment-deleteBlock">
+      <div class="comment-deleteBox">
+        <button class="comment-deletebtn">삭제</button>
+      </div>
+    </div>
+  </div>`;
+  }
+  else {
+    $input.innerHTML +=`<div class="comment-deleteBlock">
+      <div class="comment-deleteBox">
+      </div>
+    </div>
+  </div>`;
+  }
+  $("#cmt_list").append($input);
+}
+
 //comment count update function
 var update_comment_count = ()=>{
   $('#cmt-count-text').html($('#cmt_list li').length + ' 개');
@@ -9,11 +49,11 @@ const socket = io.connect('http://'+$(location).attr('host'), {
 });
 var post_index = $(location).attr('pathname').split("/");
 
-socket.on('cmt/'+post_index[2] + '/' + post_index[3], (data) => {
+socket.on('cmt/'+post_index[2] + '/' + post_index[3] + '/write', (data) => {
   //new comment coming!
-  //console.log(data);
+  console.log(data);
   //set new comment
-  new_cmt(data.cmt_id, data.nickname, data.comment, data.date);
+  new_cmt(data.cmt_id,data.mine, data.nickname, data.comment, data.date);
   //comment animation
   var autoheight = $("#cmt_id_" + data.cmt_id).children(".comment-inputtextBlock").height();
   $("#cmt_id_" + data.cmt_id).children(".comment-inputtextBlock").css({
@@ -26,15 +66,15 @@ socket.on('cmt/'+post_index[2] + '/' + post_index[3], (data) => {
 
 socket.on('cmt/'+post_index[2]+'/'+post_index[3]+'/typing', (data) => {
   //someone is typing comment contents or delete comment contents!
-  var nickname = data.id;
+  let nickname = data.id;
   if(data.typing){
     //someone is typing
     var $input = document.createElement('li');
     $input.innerHTML =
-    `<div id="`+nickname+`"class="comment-block">
+    `<div id="${nickname}"class="comment-block">
       <div class="comment-nicknameBlock">
         <div class="comment-nicknameBox">
-          <p>`+nickname+`</p>
+          <p>${nickname}</p>
         </div>
       </div>
       <div class="comment-inputtextBlock">
@@ -59,12 +99,6 @@ socket.on('cmt/'+post_index[2]+'/'+post_index[3]+'/typing', (data) => {
   else {
     //someone delete contents
     $('#'+nickname).parent().remove();
-    // $('#' + nickname).animate({
-    //   height:1
-    // },500);
-    // setTimeout(()=>{
-    //   $('#'+nickname).parent().remove();
-    // },500);
   }
 });
 
@@ -96,7 +130,7 @@ $(document).ready(() => {
       "text": cmt_text
     };
     cmt_input_text_emptycheck = true;
-    socket.emit('cmt/'+ post_index[2] + '/' + post_index[3] + "/typing", {typing:false,id:$("#cmt-input-id").text()});
+    socket.emit('cmt/'+ post_index[2] + '/' + post_index[3] + "/typing", {typing:false});
     socket.emit('cmt/' + post_index[2] + '/' + post_index[3] + "/write", post_data);
     $("#cmt-input-text").val("");
   });
@@ -120,12 +154,12 @@ $(document).ready(() => {
     if ($.trim($("#cmt-input-text").val()) === "") {
       //emit to server nothing in comment
       cmt_input_text_emptycheck = true;
-      socket.emit('cmt/'+ post_index[2] + '/' + post_index[3] + "/typing", {typing:false,id:$("#cmt-input-id").text()});
+      socket.emit('cmt/'+ post_index[2] + '/' + post_index[3] + "/typing", {typing:false});
     }
     else if (cmt_input_text_emptycheck) {
       //emit to server I am typing
       cmt_input_text_emptycheck = false;
-      socket.emit('cmt/'+ post_index[2] + '/' + post_index[3] + "/typing", {typing:true,id:$("#cmt-input-id").text()});
+      socket.emit('cmt/'+ post_index[2] + '/' + post_index[3] + "/typing", {typing:true});
     }
   });
 
@@ -134,6 +168,6 @@ $(document).ready(() => {
   //before webpage closing
   $(window).on("beforeunload", () => {
     //comment typing update
-    socket.emit('cmt/'+ post_index[2] + '/' + post_index[3] + "/typing", {typing:false,id:$("#cmt-input-id").text()});
+    socket.emit('cmt/'+ post_index[2] + '/' + post_index[3] + "/typing", {typing:false});
   });
 });

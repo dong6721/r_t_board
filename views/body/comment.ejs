@@ -33,7 +33,9 @@
       </div>
       <div class="comment-deleteBlock">
         <div class="comment-deleteBox">
+          <% if(login_data && login_data.uid === read_post.comment[i].uid) {%>
           <button class="comment-deletebtn">삭제</button>
+          <% } %>
         </div>
       </div>
     </div>
@@ -45,7 +47,7 @@
 <div class="cmt-input-block">
   <div class="comment-nicknameBlock">
     <div class="comment-nicknameBox">
-      <p id="cmt-input-id">nickname</p>
+      <p id="cmt-input-id"><%=login_data.id%></p>
     </div>
   </div>
   <div class="cmt-input-textBlock">

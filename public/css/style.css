@@ -60,7 +60,6 @@ strong {
 .nav-login-block {
   float:right;
   display:block;
-  width:300px;
   height:100px;
 }
 .nav-login-block > button{

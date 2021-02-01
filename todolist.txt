@@ -2,11 +2,7 @@ TODO_LIST;
 
 FUNCTIONAL LIST:
 {
-login 기능  <- this is the essential
-}
-
-추후 update:{
-LOGIN 기능 넣어서 id별로 작성가능하도록,
-
-관리자 page로 board 생성하도록 설정
+good cnt
+댓글 수
+내 정보 수정
 }

@@ -16,6 +16,11 @@ let cnt_update = async (board_name,number,number2) =>{
   return await boarddata.findOneAndUpdate({board_name:board_name},{$inc:{postcnt:number,active_post:number2}},{new:true});
 };
 
+let get_user_count = async (usercnt) => {
+  let iddata = await db("user","userSchema");
+  return await iddata.countDocuments({});
+};
+
 module.exports = {
   get_post: async (board_name, num, num2) => {
     //get recently post list in 'board_name' range in num and num2
@@ -66,6 +71,7 @@ module.exports = {
           subject: doc.title,
           contents:doc.contents,
           author: doc.author,
+          uid:doc.uid,
           date: get_time(doc.date),
           viewcnt: doc.viewcnt,
           goodcnt: doc.goodcnt,
@@ -116,13 +122,14 @@ module.exports = {
     return ;
   },
 
-  create_new_post: async (board_name,title,contents,time) => {
+  create_new_post: async (board_name,title,contents,author,uid,time) => {
     let board = await db(board_name, "postSchema");
     board.create({
       index: (await cnt_update(board_name,1,1)).postcnt,
       title: title,
       contents: contents,
-      author: "nickname",
+      author: author,
+      uid:uid,
       date: time
     }, (err, user) => {
       if (err) {
@@ -146,15 +153,16 @@ module.exports = {
     });
   },
 
-  create_new_comment: async (board_name,index,id,contents,time)=>{
+  create_new_comment: async (board_name,index,nickname,uid,contents,time)=>{
     let board = await db(board_name, "postSchema");
     let doc = await board.findOne({index:index});
     if(!doc) {
-      console.log("create comment fail!",board_name,index,id,contents,time);
+      console.log("create comment fail!",board_name,index,nickname,contents,time);
       return console.log("find one error!", err);
     };
     doc.comment.push({
-      nickname: id,
+      nickname: nickname,
+      uid:uid,
       comment: contents,
       date: time
     });
@@ -173,7 +181,7 @@ module.exports = {
     cnt_update(board_name,0,-1);
   },
 
-  delete_one_comment: async (board_name,index,cmt_index) => {
+  delete_one_comment: async (board_name,index,cmt_index,uid) => {
     let board = await db(board_name, "postSchema");
     let cmt_idx = cmt_index.split('_')[2];
     // board.updateOne({index:index,"comment.$":cmt_idx},{"comment.$.deleted":true},(err,res)=>{
@@ -181,10 +189,15 @@ module.exports = {
     //     return console.error(err);
     //   }
     // });
-    board.findOne({index:index},(err,doc)=>{
+    let doc = await board.findOne({index:index});
+    if(doc.uid === uid) {
       doc.comment[cmt_idx].deleted = true;
       doc.save();
-    });
+      return true;
+    }
+    else {
+      return false;
+    }
   },
 
   get_board_cnt: async (board_name) =>{
@@ -200,7 +213,7 @@ module.exports = {
     if(board_name) {
       //board_name document data
       let boarddata = await db("boarddata","boarddataSchema");
-      let doc = await boarddata.find({board_name:board_name});
+      let doc = await boarddata.findOne({board_name:board_name});
       return doc;
     }
     else {
@@ -213,12 +226,13 @@ module.exports = {
 
   //login_part
   get_login_data: async (id) => {
-    let userModel = await db("user","userSchema");
-    return await userModel.findOne({userid:id});
+    let model = await db("user","userSchema");
+    return await model.findOne({userid:id});
   },
   create_login_data: async (id,ps,psbuf)=>{
-    let userModel = await db("user","userSchema");
-    userModel.create({
+    let model = await db("user","userSchema");
+    model.create({
+      uid:await get_user_count(),
       userid: id,
       userps: ps,
       userpsbuf: psbuf
@@ -228,4 +242,8 @@ module.exports = {
       }
     });
   },
+  get_session_data: async(session_id) => {
+    let model = await db("sessions","sessionSchema");
+    return await model.findOne({_id:session_id});
+  }
 }
