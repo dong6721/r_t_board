@@ -7,11 +7,13 @@ and another person can see you typing comment & post comment too. like chatting 
 don't need F5 or refresh button for post.  
 I developed this comment system using socket.io
 
+### this is monolithic service
+
 ### you have to create database collection. I will offer board create system in this project.
 
 ---
 platform:nodejs
-framework:express
+framework:express,ejs,mongoose,express-session
 Database:mongodb
 
 you need:
