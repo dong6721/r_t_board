@@ -33,7 +33,7 @@
       </div>
       <div class="comment-deleteBlock">
         <div class="comment-deleteBox">
-          <% if(login_data && login_data.uid === read_post.comment[i].uid) {%>
+          <% if(login_data && (login_data.uid === read_post.comment[i].uid || login_data.admin)) {%>
           <button class="comment-deletebtn">삭제</button>
           <% } %>
         </div>

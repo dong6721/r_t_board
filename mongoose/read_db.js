@@ -118,7 +118,7 @@ module.exports = {
       }
     });
     //board setting
-    db(0,0,true);
+    //db(0,0,true);
     return ;
   },
 
